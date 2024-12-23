@@ -86,15 +86,15 @@ namespace DumpDrive.Data.Seeds
             builder.Entity<AuditLog>()
                 .HasData(new List<AuditLog>
                 {
-                new AuditLog("Created", file1Id, ivonaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Created", file2Id, jureId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Updated", file3Id, brunoId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Created", file4Id, anaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Created", file5Id, jureId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Updated", file6Id, brunoId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Created", file7Id, ivonaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Created", file8Id, brunoId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
-                new AuditLog("Updated", file9Id, anaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now }
+                new AuditLog(ChangeType.Created, file1Id, ivonaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Created, file2Id, jureId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Updated, file3Id, brunoId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Created, file4Id, anaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Created, file5Id, jureId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Updated, file6Id, brunoId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Created, file7Id, ivonaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Created, file8Id, brunoId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now },
+                new AuditLog(ChangeType.Updated, file9Id, anaId) { Id = Guid.NewGuid(), Timestamp = DateTime.Now }
                 });
         }
     }

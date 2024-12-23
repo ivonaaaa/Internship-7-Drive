@@ -28,9 +28,8 @@ namespace DumpDrive.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ChangeType")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ChangeType")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("ChangedByUserId")
                         .HasColumnType("uuid");
@@ -52,75 +51,75 @@ namespace DumpDrive.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f378597b-ac59-4f9e-ac19-5b25d816e1d7"),
-                            ChangeType = "Created",
-                            ChangedByUserId = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2"),
-                            FileId = new Guid("a9576931-4a7d-4e1a-bfe5-04f37183a465"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5611)
+                            Id = new Guid("824d9428-d5f6-4fb7-8f39-d5361c1a5ea7"),
+                            ChangeType = 0,
+                            ChangedByUserId = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5"),
+                            FileId = new Guid("32f425b4-023d-4471-af12-7a1dee7a9d31"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9568)
                         },
                         new
                         {
-                            Id = new Guid("574219fe-499a-459f-9106-59df36fbaccd"),
-                            ChangeType = "Created",
-                            ChangedByUserId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc"),
-                            FileId = new Guid("835acc43-8f26-4bd5-8605-c9da64022464"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5635)
+                            Id = new Guid("1514934d-d374-4abf-b657-f011e3a21350"),
+                            ChangeType = 0,
+                            ChangedByUserId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6"),
+                            FileId = new Guid("e8502326-5498-46e2-812f-bc822fdc760f"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9589)
                         },
                         new
                         {
-                            Id = new Guid("9e8e2376-89ee-4276-8ecb-aed6e0dece26"),
-                            ChangeType = "Updated",
-                            ChangedByUserId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477"),
-                            FileId = new Guid("f3380411-ae38-447f-9d0a-35374171e7bb"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5640)
+                            Id = new Guid("21d69c72-89a3-43a6-9c44-9cf9283479bc"),
+                            ChangeType = 1,
+                            ChangedByUserId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2"),
+                            FileId = new Guid("d6e827ed-8306-48e8-9609-75b7e6e74c32"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9600)
                         },
                         new
                         {
-                            Id = new Guid("43ffc831-34b2-4496-8308-f498d931a96c"),
-                            ChangeType = "Created",
-                            ChangedByUserId = new Guid("35d921a2-a2f4-48ff-8c42-e97bb6029b28"),
-                            FileId = new Guid("0e9c0b20-41a1-4a8c-ad82-e6fb432d3e96"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5650)
+                            Id = new Guid("0b214159-644a-42e4-8bf6-8a2e207e0861"),
+                            ChangeType = 0,
+                            ChangedByUserId = new Guid("452b0e07-2970-4fd4-b6ad-c8e6334285b1"),
+                            FileId = new Guid("bb617bf0-1e31-4fc2-9f64-1bc756bcd52b"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9605)
                         },
                         new
                         {
-                            Id = new Guid("11c5b120-ef31-4994-80f7-7ad6a569e5e0"),
-                            ChangeType = "Created",
-                            ChangedByUserId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc"),
-                            FileId = new Guid("52631aa8-0ddd-46da-b460-e228813095bc"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5654)
+                            Id = new Guid("356b92c0-23e1-474e-9885-f99ec45a4982"),
+                            ChangeType = 0,
+                            ChangedByUserId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6"),
+                            FileId = new Guid("fee5ed5b-e298-4b90-86a6-c67d5c81b884"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9609)
                         },
                         new
                         {
-                            Id = new Guid("13f82380-aa4c-4736-b698-daa5b2f9193b"),
-                            ChangeType = "Updated",
-                            ChangedByUserId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477"),
-                            FileId = new Guid("76db8152-f3ea-4ed1-837d-71eeeb88b3c7"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5677)
+                            Id = new Guid("02ded773-1683-43ad-b6ac-4d549ef86db5"),
+                            ChangeType = 1,
+                            ChangedByUserId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2"),
+                            FileId = new Guid("35471e3e-6b90-49fa-a5c0-6e8aa40e8c12"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9616)
                         },
                         new
                         {
-                            Id = new Guid("fc257c37-5399-4750-832d-3827748eed6e"),
-                            ChangeType = "Created",
-                            ChangedByUserId = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2"),
-                            FileId = new Guid("5d59be09-3a25-4ada-8356-08e190ef1370"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5681)
+                            Id = new Guid("0c71fdf0-f7ce-455a-b42e-b704bb373cd9"),
+                            ChangeType = 0,
+                            ChangedByUserId = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5"),
+                            FileId = new Guid("6d043be4-b9f1-4f97-819e-b43945beab48"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9622)
                         },
                         new
                         {
-                            Id = new Guid("2be5eb5b-5b31-4405-a278-8c0bc3057f57"),
-                            ChangeType = "Created",
-                            ChangedByUserId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477"),
-                            FileId = new Guid("615e4d6b-f6f5-4074-a1e3-3417039ef5ae"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5687)
+                            Id = new Guid("f97650ed-a89a-43a8-8e3a-2184ee390939"),
+                            ChangeType = 0,
+                            ChangedByUserId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2"),
+                            FileId = new Guid("1de5794d-5abf-477c-9f64-bf61af74870a"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9626)
                         },
                         new
                         {
-                            Id = new Guid("ad6785af-ee8a-4c0d-8475-0593c4ff5115"),
-                            ChangeType = "Updated",
-                            ChangedByUserId = new Guid("35d921a2-a2f4-48ff-8c42-e97bb6029b28"),
-                            FileId = new Guid("23735773-88be-4f1a-bcb9-fefd2746aff5"),
-                            Timestamp = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(5691)
+                            Id = new Guid("13e17b7f-5caa-493e-9118-99c19a7c981e"),
+                            ChangeType = 1,
+                            ChangedByUserId = new Guid("452b0e07-2970-4fd4-b6ad-c8e6334285b1"),
+                            FileId = new Guid("224e18e7-51d8-4b17-8de8-c2a88eb021d2"),
+                            Timestamp = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(9630)
                         });
                 });
 
@@ -154,107 +153,107 @@ namespace DumpDrive.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("52832096-ce06-49d6-904a-4acb73e010d8"),
+                            Id = new Guid("d2e650d7-4700-4fbf-a918-94e864ec2a6c"),
                             Content = "Great resume!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3491),
-                            FileId = new Guid("a9576931-4a7d-4e1a-bfe5-04f37183a465"),
-                            UserId = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6631),
+                            FileId = new Guid("32f425b4-023d-4471-af12-7a1dee7a9d31"),
+                            UserId = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5")
                         },
                         new
                         {
-                            Id = new Guid("8bbf5526-f7e2-4fa7-b770-ce5c748e00a6"),
+                            Id = new Guid("02ed643a-1a01-48fe-ae0a-63a292388130"),
                             Content = "Lovely picture!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3515),
-                            FileId = new Guid("835acc43-8f26-4bd5-8605-c9da64022464"),
-                            UserId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6661),
+                            FileId = new Guid("e8502326-5498-46e2-812f-bc822fdc760f"),
+                            UserId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6")
                         },
                         new
                         {
-                            Id = new Guid("2446ceb9-81d1-464d-91b6-022feeb22606"),
+                            Id = new Guid("65d2594b-9fbd-4404-a3ca-c027d7f58b02"),
                             Content = "Nice music!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3520),
-                            FileId = new Guid("f3380411-ae38-447f-9d0a-35374171e7bb"),
-                            UserId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6666),
+                            FileId = new Guid("d6e827ed-8306-48e8-9609-75b7e6e74c32"),
+                            UserId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2")
                         },
                         new
                         {
-                            Id = new Guid("bac32300-4c43-4981-9ad7-cf48c62ff52a"),
+                            Id = new Guid("bd8fe442-1faf-4591-b907-e50e690229b7"),
                             Content = "Cool video!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3525),
-                            FileId = new Guid("0e9c0b20-41a1-4a8c-ad82-e6fb432d3e96"),
-                            UserId = new Guid("35d921a2-a2f4-48ff-8c42-e97bb6029b28")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6692),
+                            FileId = new Guid("bb617bf0-1e31-4fc2-9f64-1bc756bcd52b"),
+                            UserId = new Guid("452b0e07-2970-4fd4-b6ad-c8e6334285b1")
                         },
                         new
                         {
-                            Id = new Guid("204af48d-348d-4849-8793-a24971b0cded"),
+                            Id = new Guid("2ffa6dd0-433e-42f9-ba85-b29b484227a2"),
                             Content = "This resume could be better.",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3533),
-                            FileId = new Guid("a9576931-4a7d-4e1a-bfe5-04f37183a465"),
-                            UserId = new Guid("35d921a2-a2f4-48ff-8c42-e97bb6029b28")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6698),
+                            FileId = new Guid("32f425b4-023d-4471-af12-7a1dee7a9d31"),
+                            UserId = new Guid("452b0e07-2970-4fd4-b6ad-c8e6334285b1")
                         },
                         new
                         {
-                            Id = new Guid("e8ee2d2f-5d35-44ea-83c2-7963b04a79db"),
+                            Id = new Guid("866b0120-9b3a-4f02-bfe5-4a0416c525b0"),
                             Content = "Beautiful image!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3540),
-                            FileId = new Guid("835acc43-8f26-4bd5-8605-c9da64022464"),
-                            UserId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6704),
+                            FileId = new Guid("e8502326-5498-46e2-812f-bc822fdc760f"),
+                            UserId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2")
                         },
                         new
                         {
-                            Id = new Guid("b9bfb166-d6b1-4017-b304-30d4c272c506"),
+                            Id = new Guid("f2a93e8e-1c37-4ff3-b013-4906b46bbed6"),
                             Content = "I dont like this song!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3544),
-                            FileId = new Guid("f3380411-ae38-447f-9d0a-35374171e7bb"),
-                            UserId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6708),
+                            FileId = new Guid("d6e827ed-8306-48e8-9609-75b7e6e74c32"),
+                            UserId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2")
                         },
                         new
                         {
-                            Id = new Guid("c52b6f4a-88ee-4974-81c1-d2d9958ba44f"),
+                            Id = new Guid("a65a4dc6-14a8-48b3-9c6a-e722a47bb3b0"),
                             Content = "Amazing video!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3548),
-                            FileId = new Guid("0e9c0b20-41a1-4a8c-ad82-e6fb432d3e96"),
-                            UserId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6715),
+                            FileId = new Guid("bb617bf0-1e31-4fc2-9f64-1bc756bcd52b"),
+                            UserId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6")
                         },
                         new
                         {
-                            Id = new Guid("aa55974c-af19-455a-b3b8-163706f5a907"),
+                            Id = new Guid("b31ee5bf-4dad-49da-a545-f5027723fbd9"),
                             Content = "Excellent project plan!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3554),
-                            FileId = new Guid("52631aa8-0ddd-46da-b460-e228813095bc"),
-                            UserId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6719),
+                            FileId = new Guid("fee5ed5b-e298-4b90-86a6-c67d5c81b884"),
+                            UserId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6")
                         },
                         new
                         {
-                            Id = new Guid("77a50885-fe18-4e46-b93c-d028b542a377"),
+                            Id = new Guid("771366b1-9c06-4b9a-a9e0-b9141f9d5359"),
                             Content = "Great presentation!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3560),
-                            FileId = new Guid("76db8152-f3ea-4ed1-837d-71eeeb88b3c7"),
-                            UserId = new Guid("35d921a2-a2f4-48ff-8c42-e97bb6029b28")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6725),
+                            FileId = new Guid("35471e3e-6b90-49fa-a5c0-6e8aa40e8c12"),
+                            UserId = new Guid("452b0e07-2970-4fd4-b6ad-c8e6334285b1")
                         },
                         new
                         {
-                            Id = new Guid("7158c0a1-27ea-4682-8b9e-91933101aca1"),
+                            Id = new Guid("f5e8222b-0b63-42dc-a5de-d6ca3f458cfc"),
                             Content = "Very detailed report!",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3564),
-                            FileId = new Guid("5d59be09-3a25-4ada-8356-08e190ef1370"),
-                            UserId = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6730),
+                            FileId = new Guid("6d043be4-b9f1-4f97-819e-b43945beab48"),
+                            UserId = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5")
                         },
                         new
                         {
-                            Id = new Guid("343e9b97-ca4f-4bc6-b8b0-ca607d51449f"),
+                            Id = new Guid("9dcc1f61-a049-4a4c-941b-94c53e1758bb"),
                             Content = "Important archive data.",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3568),
-                            FileId = new Guid("615e4d6b-f6f5-4074-a1e3-3417039ef5ae"),
-                            UserId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6737),
+                            FileId = new Guid("1de5794d-5abf-477c-9f64-bf61af74870a"),
+                            UserId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6")
                         },
                         new
                         {
-                            Id = new Guid("ff0191ec-51cd-4540-ab65-6e4beb2a8bb8"),
+                            Id = new Guid("4632e19f-dec6-4902-818e-26a47e12fc73"),
                             Content = "Data needs cleanup.",
-                            CreatedAt = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(3574),
-                            FileId = new Guid("23735773-88be-4f1a-bcb9-fefd2746aff5"),
-                            UserId = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2")
+                            CreatedAt = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(6741),
+                            FileId = new Guid("224e18e7-51d8-4b17-8de8-c2a88eb021d2"),
+                            UserId = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5")
                         });
                 });
 
@@ -286,73 +285,73 @@ namespace DumpDrive.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a9576931-4a7d-4e1a-bfe5-04f37183a465"),
-                            FolderId = new Guid("cbdef7a9-1287-4c83-bdf7-ceb5fa1858e6"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 441, DateTimeKind.Local).AddTicks(5186),
+                            Id = new Guid("32f425b4-023d-4471-af12-7a1dee7a9d31"),
+                            FolderId = new Guid("5cef4e4f-e45e-4c18-9412-95e0a60485ba"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 633, DateTimeKind.Local).AddTicks(2231),
                             Name = "resume.pdf",
                             Status = 0
                         },
                         new
                         {
-                            Id = new Guid("835acc43-8f26-4bd5-8605-c9da64022464"),
-                            FolderId = new Guid("d05857a5-0949-4d5b-aa4e-812d95796107"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(977),
+                            Id = new Guid("e8502326-5498-46e2-812f-bc822fdc760f"),
+                            FolderId = new Guid("d35949dd-0fa8-4d63-9bf9-841bd1ceea8d"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4021),
                             Name = "holiday.jpg",
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("f3380411-ae38-447f-9d0a-35374171e7bb"),
-                            FolderId = new Guid("96a50c96-d8a5-489e-ba48-d8752937a29a"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(1005),
+                            Id = new Guid("d6e827ed-8306-48e8-9609-75b7e6e74c32"),
+                            FolderId = new Guid("24d9ab73-e685-4f17-95d1-27ee7c49fd7f"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4051),
                             Name = "song.mp3",
                             Status = 0
                         },
                         new
                         {
-                            Id = new Guid("0e9c0b20-41a1-4a8c-ad82-e6fb432d3e96"),
-                            FolderId = new Guid("9f57fee3-0281-4964-9957-6e1e3f6fd585"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(1010),
+                            Id = new Guid("bb617bf0-1e31-4fc2-9f64-1bc756bcd52b"),
+                            FolderId = new Guid("20579cf7-683a-43cb-96c1-1d1cea99e2ff"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4055),
                             Name = "movie.mp4",
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("52631aa8-0ddd-46da-b460-e228813095bc"),
-                            FolderId = new Guid("35e17ffe-f17f-4daf-9959-28fd59225c6c"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(1012),
+                            Id = new Guid("fee5ed5b-e298-4b90-86a6-c67d5c81b884"),
+                            FolderId = new Guid("560285d6-0b19-4d6d-a3e6-a8922eb9fee8"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4058),
                             Name = "project_plan.docx",
                             Status = 0
                         },
                         new
                         {
-                            Id = new Guid("76db8152-f3ea-4ed1-837d-71eeeb88b3c7"),
-                            FolderId = new Guid("35e17ffe-f17f-4daf-9959-28fd59225c6c"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(1022),
+                            Id = new Guid("35471e3e-6b90-49fa-a5c0-6e8aa40e8c12"),
+                            FolderId = new Guid("560285d6-0b19-4d6d-a3e6-a8922eb9fee8"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4066),
                             Name = "presentation.pptx",
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("5d59be09-3a25-4ada-8356-08e190ef1370"),
-                            FolderId = new Guid("876ac257-805f-42fe-bf9d-6bdc61513790"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(1025),
+                            Id = new Guid("6d043be4-b9f1-4f97-819e-b43945beab48"),
+                            FolderId = new Guid("22bf8709-b379-4694-8d7e-1da607c38a46"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4069),
                             Name = "report.pdf",
                             Status = 0
                         },
                         new
                         {
-                            Id = new Guid("615e4d6b-f6f5-4074-a1e3-3417039ef5ae"),
-                            FolderId = new Guid("fb493f64-8f9e-423f-8609-5398ffea0e24"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(1028),
+                            Id = new Guid("1de5794d-5abf-477c-9f64-bf61af74870a"),
+                            FolderId = new Guid("0556fbe4-0248-4194-906a-03931cf77874"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4071),
                             Name = "archive.zip",
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("23735773-88be-4f1a-bcb9-fefd2746aff5"),
-                            FolderId = new Guid("fb493f64-8f9e-423f-8609-5398ffea0e24"),
-                            LastChanged = new DateTime(2024, 12, 23, 18, 34, 32, 444, DateTimeKind.Local).AddTicks(1031),
+                            Id = new Guid("224e18e7-51d8-4b17-8de8-c2a88eb021d2"),
+                            FolderId = new Guid("0556fbe4-0248-4194-906a-03931cf77874"),
+                            LastChanged = new DateTime(2024, 12, 23, 21, 33, 1, 635, DateTimeKind.Local).AddTicks(4084),
                             Name = "data.csv",
                             Status = 0
                         });
@@ -383,51 +382,51 @@ namespace DumpDrive.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cbdef7a9-1287-4c83-bdf7-ceb5fa1858e6"),
+                            Id = new Guid("5cef4e4f-e45e-4c18-9412-95e0a60485ba"),
                             Name = "Documents",
-                            OwnerId = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2"),
+                            OwnerId = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5"),
                             Status = 0
                         },
                         new
                         {
-                            Id = new Guid("d05857a5-0949-4d5b-aa4e-812d95796107"),
+                            Id = new Guid("d35949dd-0fa8-4d63-9bf9-841bd1ceea8d"),
                             Name = "Photos",
-                            OwnerId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc"),
+                            OwnerId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6"),
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("96a50c96-d8a5-489e-ba48-d8752937a29a"),
+                            Id = new Guid("24d9ab73-e685-4f17-95d1-27ee7c49fd7f"),
                             Name = "Music",
-                            OwnerId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477"),
+                            OwnerId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2"),
                             Status = 0
                         },
                         new
                         {
-                            Id = new Guid("9f57fee3-0281-4964-9957-6e1e3f6fd585"),
+                            Id = new Guid("20579cf7-683a-43cb-96c1-1d1cea99e2ff"),
                             Name = "Videos",
-                            OwnerId = new Guid("35d921a2-a2f4-48ff-8c42-e97bb6029b28"),
+                            OwnerId = new Guid("452b0e07-2970-4fd4-b6ad-c8e6334285b1"),
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("35e17ffe-f17f-4daf-9959-28fd59225c6c"),
+                            Id = new Guid("560285d6-0b19-4d6d-a3e6-a8922eb9fee8"),
                             Name = "Projects",
-                            OwnerId = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477"),
+                            OwnerId = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2"),
                             Status = 0
                         },
                         new
                         {
-                            Id = new Guid("876ac257-805f-42fe-bf9d-6bdc61513790"),
+                            Id = new Guid("22bf8709-b379-4694-8d7e-1da607c38a46"),
                             Name = "Downloads",
-                            OwnerId = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc"),
+                            OwnerId = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6"),
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("fb493f64-8f9e-423f-8609-5398ffea0e24"),
+                            Id = new Guid("0556fbe4-0248-4194-906a-03931cf77874"),
                             Name = "Archives",
-                            OwnerId = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2"),
+                            OwnerId = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5"),
                             Status = 0
                         });
                 });
@@ -457,28 +456,28 @@ namespace DumpDrive.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d7cd27c9-3228-4a36-9b9e-f6d49d7004f2"),
+                            Id = new Guid("a26a6659-dc93-4648-8369-f6d22bf81bb5"),
                             Email = "ivona@gmail.com",
                             Password = "password123",
                             Username = "ivona"
                         },
                         new
                         {
-                            Id = new Guid("2cc482bc-2e1e-404e-b718-46161bd84fdc"),
+                            Id = new Guid("59cd52ed-a7a7-4f8c-9470-fc6acc1ed8c6"),
                             Email = "jure@gmail.com",
                             Password = "password456",
                             Username = "jure"
                         },
                         new
                         {
-                            Id = new Guid("c5465eac-27d8-405e-8e8a-eaced647b477"),
+                            Id = new Guid("1026c846-44d1-4a91-9f70-fb6930d95ae2"),
                             Email = "bruno@gmail.com",
                             Password = "pass9",
                             Username = "bruno"
                         },
                         new
                         {
-                            Id = new Guid("35d921a2-a2f4-48ff-8c42-e97bb6029b28"),
+                            Id = new Guid("452b0e07-2970-4fd4-b6ad-c8e6334285b1"),
                             Email = "ana@gmail.com",
                             Password = "pass7",
                             Username = "ana"

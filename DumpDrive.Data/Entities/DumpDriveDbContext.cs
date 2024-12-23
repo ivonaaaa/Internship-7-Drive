@@ -21,8 +21,6 @@ namespace DumpDrive.Data.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Folder>()
                 .HasOne(f => f.Owner)
                 .WithMany(u => u.Folders)
