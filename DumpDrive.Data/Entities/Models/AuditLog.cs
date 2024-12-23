@@ -4,13 +4,13 @@ namespace DumpDrive.Data.Entities.Models
 {
     public class AuditLog
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         public string ChangeType { get; set; }
-        public Guid FileId { get; private set; }
+        public Guid FileId { get; set; }
         public DumpFile File { get; set; }
-        public Guid ChangedByUserId { get; private set; }
+        public Guid ChangedByUserId { get; set; }
         public User ChangedByUser { get; set; }
-        public DateTime Timestamp { get; private set; }
+        public DateTime Timestamp { get; set; }
 
         public AuditLog(string changeType, Guid fileId, Guid changedByUserId)
         {

@@ -4,13 +4,13 @@ namespace DumpDrive.Data.Entities.Models
 {
     public class Comment
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         public string Content { get; set; }
-        public Guid FileId { get; private set; }
+        public Guid FileId { get; set; }
         public DumpFile File { get; set; }
-        public Guid UserId { get; private set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
-        public DateTime CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
 
         public Comment(string content, Guid fileId, Guid userId)
         {

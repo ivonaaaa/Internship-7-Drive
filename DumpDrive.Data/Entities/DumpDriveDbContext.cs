@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using DumpDrive.Data.Entities.Models;
 using DumpDrive.Data.Seeds;
+using Microsoft.Extensions.Configuration;
 
 namespace DumpDrive.Data.Entities
 {
@@ -38,12 +39,12 @@ namespace DumpDrive.Data.Entities
                 .HasForeignKey(c => c.UserId);
 
             modelBuilder.Entity<Comment>()
-                .HasOne(c => c.DumpFile)
+                .HasOne(c => c.File)
                 .WithMany(f => f.Comments)
                 .HasForeignKey(c => c.FileId);
 
             modelBuilder.Entity<AuditLog>()
-                .HasOne(a => a.DumpFile)
+                .HasOne(a => a.File)
                 .WithMany(f => f.AuditLogs)
                 .HasForeignKey(a => a.FileId);
 
@@ -52,7 +53,7 @@ namespace DumpDrive.Data.Entities
                 .WithMany(u => u.AuditLogs)
                 .HasForeignKey(a => a.ChangedByUserId);
 
-            DumpDrive.Data.Seeds.DbSeeder.Seed(modelBuilder);
+            DbSeeder.Seed(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
     }
@@ -61,9 +62,12 @@ namespace DumpDrive.Data.Entities
     {
         public DumpDriveDbContext CreateDbContext(string[] args)
         {
+            var presentationLayerPath = Path.Combine(Directory.GetCurrentDirectory(), @"..\DumpDrive.Presentation");
+            var configFilePath = Path.Combine(presentationLayerPath, "App.config.xml");
+
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddXmlFile("App.config")
+                .SetBasePath(presentationLayerPath)
+                .AddXmlFile(configFilePath)
                 .Build();
 
             config.Providers

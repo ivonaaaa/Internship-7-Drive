@@ -4,9 +4,9 @@ namespace DumpDrive.Data.Entities.Models
 {
     public class Folder
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public Guid OwnerId { get; private set; }
+        public Guid OwnerId { get; set; }
         public User Owner { get; set; }
         public SharedStatus Status { get; set; }
         public List<DumpFile> Files { get; set; } = new List<DumpFile>();

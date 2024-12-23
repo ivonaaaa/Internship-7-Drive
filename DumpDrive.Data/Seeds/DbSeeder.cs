@@ -51,18 +51,18 @@ namespace DumpDrive.Data.Seeds
             var file8Id = Guid.NewGuid();
             var file9Id = Guid.NewGuid();
 
-            builder.Entity<File>()
-                .HasData(new List<File>
+            builder.Entity<DumpFile>()
+                .HasData(new List<DumpFile>
                 {
-                new File("resume.pdf", folder1Id) { Id = file1Id, Status = SharedStatus.Private },
-                new File("holiday.jpg", folder2Id) { Id = file2Id, Status = SharedStatus.Shared },
-                new File("song.mp3", folder3Id) { Id = file3Id, Status = SharedStatus.Private },
-                new File("movie.mp4", folder4Id) { Id = file4Id, Status = SharedStatus.Shared },
-                new File("project_plan.docx", folder5Id) { Id = file5Id, Status = SharedStatus.Private },
-                new File("presentation.pptx", folder5Id) { Id = file6Id, Status = SharedStatus.Shared },
-                new File("report.pdf", folder6Id) { Id = file7Id, Status = SharedStatus.Private },
-                new File("archive.zip", folder7Id) { Id = file8Id, Status = SharedStatus.Shared },
-                new File("data.csv", folder7Id) { Id = file9Id, Status = SharedStatus.Private }
+                new DumpFile("resume.pdf", folder1Id) { Id = file1Id, Status = SharedStatus.Private },
+                new DumpFile("holiday.jpg", folder2Id) { Id = file2Id, Status = SharedStatus.Shared },
+                new DumpFile("song.mp3", folder3Id) { Id = file3Id, Status = SharedStatus.Private },
+                new DumpFile("movie.mp4", folder4Id) { Id = file4Id, Status = SharedStatus.Shared },
+                new DumpFile("project_plan.docx", folder5Id) { Id = file5Id, Status = SharedStatus.Private },
+                new DumpFile("presentation.pptx", folder5Id) { Id = file6Id, Status = SharedStatus.Shared },
+                new DumpFile("report.pdf", folder6Id) { Id = file7Id, Status = SharedStatus.Private },
+                new DumpFile("archive.zip", folder7Id) { Id = file8Id, Status = SharedStatus.Shared },
+                new DumpFile("data.csv", folder7Id) { Id = file9Id, Status = SharedStatus.Private }
                 });
 
             builder.Entity<Comment>()
