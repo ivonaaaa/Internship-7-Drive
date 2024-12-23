@@ -1,19 +1,22 @@
 ﻿using System;
 
-public class Folder
+namespace DumpDrive.Data.Entities.Models
 {
-    public Guid Id { get; private set; }
-    public string Name { get; set; }
-    public Guid OwnerId { get; private set; }
-    public User Owner { get; set; }
-    public SharedStatus Status { get; set; }
-    public List<File> Files { get; set; } = new List<File>();
-
-    public Folder(string name, Guid ownerId)
+    public class Folder
     {
-        Id = Guid.NewGuid();
-        Name = name;
-        OwnerId = ownerId;
-        Status = SharedStatus.Private;
+        public Guid Id { get; private set; }
+        public string Name { get; set; }
+        public Guid OwnerId { get; private set; }
+        public User Owner { get; set; }
+        public SharedStatus Status { get; set; }
+        public List<DumpFile> Files { get; set; } = new List<DumpFile>();
+
+        public Folder(string name, Guid ownerId)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            OwnerId = ownerId;
+            Status = SharedStatus.Private;
+        }
     }
 }
