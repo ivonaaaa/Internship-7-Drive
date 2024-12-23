@@ -12,7 +12,7 @@ public class AuditLog
 
     public AuditLog(string changeType, Guid fileId, Guid changedByUserId)
     {
-         = Guid.NewGuid();
+        Id = Guid.NewGuid();
         ChangeType = changeType;
         FileId = fileId;
         ChangedByUserId = changedByUserId;
