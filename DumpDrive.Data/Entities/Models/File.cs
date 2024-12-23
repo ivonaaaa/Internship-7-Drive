@@ -5,16 +5,16 @@ public class File
     public Guid Id { get; private set; }
     public string Name { get; set; }
     public DateTime LastChanged { get; private set; }
-    public Guid OwnerId { get; private set; }
-    public User Owner { get; set; }
+    public Guid FolderId { get; private set; }
+    public Folder Folder { get; set; }
     public SharedStatus Status { get; set; }
 
-    public File(string name, Guid ownerId)
+    public File(string name, Guid folderId)
     {
         Id = Guid.NewGuid();
         Name = name;
         LastChanged = DateTime.Now;
-        OwnerId = ownerId;
+        FolderId = folderId;
         Status = SharedStatus.Private;
     }
 }
