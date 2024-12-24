@@ -48,7 +48,7 @@ namespace DumpDrive.Data.Migrations
 
                     b.HasIndex("FileId");
 
-                    b.ToTable("AuditLogs");
+                    b.ToTable("AuditLogs", (string)null);
 
                     b.HasData(
                         new
@@ -152,7 +152,7 @@ namespace DumpDrive.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
 
                     b.HasData(
                         new
@@ -286,7 +286,7 @@ namespace DumpDrive.Data.Migrations
 
                     b.HasIndex("FolderId");
 
-                    b.ToTable("Files");
+                    b.ToTable("Files", (string)null);
 
                     b.HasData(
                         new
@@ -385,7 +385,7 @@ namespace DumpDrive.Data.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Folders");
+                    b.ToTable("Folders", (string)null);
 
                     b.HasData(
                         new
@@ -461,7 +461,7 @@ namespace DumpDrive.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new

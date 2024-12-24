@@ -60,8 +60,16 @@ namespace DumpDrive.Data.Entities
     {
         public DumpDriveDbContext CreateDbContext(string[] args)
         {
-            var presentationLayerPath = Path.Combine(Directory.GetCurrentDirectory(), @"..\DumpDrive.Presentation");
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var presentationLayerPath = Path.Combine(currentDirectory, "..", "DumpDrive.Presentation");
+
+            if (!Directory.Exists(presentationLayerPath))
+                throw new DirectoryNotFoundException($"Directory '{presentationLayerPath}' not found.");
+
             var configFilePath = Path.Combine(presentationLayerPath, "App.config.xml");
+
+            if (!File.Exists(configFilePath))
+                throw new FileNotFoundException($"Configuration file '{configFilePath}' not found.");
 
             var config = new ConfigurationBuilder()
                 .SetBasePath(presentationLayerPath)
@@ -79,4 +87,5 @@ namespace DumpDrive.Data.Entities
             return new DumpDriveDbContext(options);
         }
     }
+
 }
