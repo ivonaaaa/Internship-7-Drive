@@ -4,17 +4,16 @@ namespace DumpDrive.Data.Entities.Models
 {
     public class AuditLog
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public ChangeType ChangeType { get; set; }
-        public Guid FileId { get; set; }
-        public DumpFile File { get; set; }
-        public Guid ChangedByUserId { get; set; }
-        public User ChangedByUser { get; set; }
+        public int FileId { get; set; }
+        public DumpFile? File { get; set; }
+        public int ChangedByUserId { get; set; }
+        public User? ChangedByUser { get; set; }
         public DateTime Timestamp { get; set; }
 
-        public AuditLog(ChangeType changeType, Guid fileId, Guid changedByUserId)
+        public AuditLog(ChangeType changeType, int fileId, int changedByUserId)
         {
-            Id = Guid.NewGuid();
             ChangeType = changeType;
             FileId = fileId;
             ChangedByUserId = changedByUserId;
