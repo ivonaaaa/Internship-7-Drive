@@ -14,35 +14,40 @@ namespace DumpDrive.Presentation.Actions
         {
             var userRepository = RepositoryFactory.Create<UserRepository>();
 
-            string email;
             while (true)
             {
+                string email;
                 if (!Reader.TryReadLine("Enter your email: ", out email) || !ValidationHelper.IsValidEmail(email))
                 {
                     Console.WriteLine("Invalid email format. Please try again.");
                     continue;
                 }
-                break;
-            }
 
-            string password;
-            if (!Reader.TryReadLine("Enter your password: ", out password) || !ValidationHelper.IsValidPassword(password))
-            {
-                Console.WriteLine("Password must be at least 6 characters long.");
-                return;
-            }
+                string password;
+                if (!Reader.TryReadLine("Enter your password: ", out password))
+                {
+                    Console.WriteLine("Password cannot be empty.");
+                    continue;
+                }
 
-            Console.WriteLine($"Attempting to log in with email: {email}");
-            var user = userRepository.GetByEmailAndPassword(email, password);
-            if (user != null)
-            {
-                Console.WriteLine("Login successful! Welcome.");
-                var mainMenu = new MainMenu();
-                mainMenu.Execute();
-            }
-            else Console.WriteLine("Invalid email or password. Please try again.");
+                Console.WriteLine($"Attempting to log in with email: {email}");
 
-            Console.ReadKey();
+                var user = userRepository.GetByEmailAndPassword(email, password);
+                if (user != null)
+                {
+                    Console.WriteLine($"Login successful! Welcome, {user.Username}.\n\nPress any key to continue...");
+                    Console.ReadKey();
+                    Console.Clear();
+                    var mainMenu = new MainMenu();
+                    mainMenu.Execute();
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid email or password. You must wait 30 seconds before trying again.");
+                    Thread.Sleep(30000);
+                }
+            }
         }
     }
 }

@@ -6,9 +6,9 @@ namespace DumpDrive
     {
         static void Main(string[] args)
         {
-            var menuFactory = new LoginAndRegistration();
-            var mainMenu = menuFactory.CreateLoginAndRegisterMenu();
-            mainMenu.Execute();
+            var homePageFactory = new LoginAndRegistration();
+            var homePage = homePageFactory.CreateLoginAndRegisterMenu();
+            homePage.Execute();
         }
     }
 }

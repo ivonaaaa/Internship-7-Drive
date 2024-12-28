@@ -10,11 +10,6 @@ namespace DumpDrive.Presentation.Utils
             return emailRegex.IsMatch(email);
         }
 
-        public static bool IsValidPassword(string password)
-        {
-            return !string.IsNullOrWhiteSpace(password) && password.Length >= 6;
-        }
-
         public static string GenerateCaptcha()
         {
             var random = new Random();

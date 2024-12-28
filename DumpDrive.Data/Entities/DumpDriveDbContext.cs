@@ -14,7 +14,7 @@ namespace DumpDrive.Data.Entities
         public DbSet<Comment> Comments { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
 
-        public DumpDriveDbContext(DbContextOptions<DumpDriveDbContext> options) : base(options)
+        public DumpDriveDbContext(DbContextOptions options) : base(options)
         {
         }
 

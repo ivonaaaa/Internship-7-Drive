@@ -4,12 +4,12 @@ using DumpDrive.Data.Entities;
 
 namespace DumpDrive.Domain.Factories
 {
-    public static class DumpDriveDbContextFactory
+    public static class DbContextFactory
     {
         public static DumpDriveDbContext GetDumpDriveDbContext()
         {
-            var options = new DbContextOptionsBuilder<DumpDriveDbContext>()
-                .UseNpgsql(ConfigurationManager.ConnectionStrings["DumpDrive"].ConnectionString)
+            var options = new DbContextOptionsBuilder()
+                .UseNpgsql("Host=localhost;Database=DumpDrive;User Id=postgres;Password=dumpbaze")
                 .Options;
 
             return new DumpDriveDbContext(options);

@@ -16,7 +16,7 @@ namespace DumpDrive.Presentation.Actions
         public void Execute()
         {
             Console.WriteLine("Exiting application...");
-            Environment.Exit(0);  // Ovdje možete dodati logiku za izlaz iz aplikacije
+            Environment.Exit(0);
         }
     }
 }

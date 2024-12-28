@@ -36,9 +36,9 @@ namespace DumpDrive.Presentation.Actions
             string password, confirmPassword;
             while (true)
             {
-                if (!Reader.TryReadLine("Enter your password: ", out password) || !ValidationHelper.IsValidPassword(password))
+                if (!Reader.TryReadLine("Enter your password: ", out password))
                 {
-                    Console.WriteLine("Password must be at least 6 characters long.");
+                    Console.WriteLine("Password cannot be empty.");
                     continue;
                 }
 
