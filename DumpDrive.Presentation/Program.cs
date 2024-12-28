@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DumpDrive.Presentation.Abstractions;
-using DumpDrive.Presentation.Actions;
-using DumpDrive.Presentation.Factories;
+﻿using DumpDrive.Presentation.Factories;
 
 namespace DumpDrive
 {
@@ -10,7 +6,7 @@ namespace DumpDrive
     {
         static void Main(string[] args)
         {
-            var menuFactory = new LoginAndRegistrationFactory();
+            var menuFactory = new LoginAndRegistration();
             var mainMenu = menuFactory.CreateLoginAndRegisterMenu();
             mainMenu.Execute();
         }

@@ -20,16 +20,7 @@ namespace DumpDrive.Presentation.Extensions
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Choose an option:");
-
-                for (int i = 0; i < actions.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1}. {actions[i].Name}");
-                }
-
-                Console.WriteLine("0. Exit");
                 Console.Write("\nSelect an option: ");
-
                 if (int.TryParse(Console.ReadLine(), out int choice))
                 {
                     if (choice == 0)
@@ -39,9 +30,7 @@ namespace DumpDrive.Presentation.Extensions
                     }
 
                     if (choice >= 1 && choice <= actions.Count)
-                    {
                         actions[choice - 1].Execute();
-                    }
                     else
                     {
                         Console.WriteLine("Invalid option. Press any key to try again.");

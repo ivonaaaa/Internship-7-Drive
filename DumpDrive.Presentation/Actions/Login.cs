@@ -1,5 +1,8 @@
-﻿using System;
+﻿using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Abstractions;
+using DumpDrive.Presentation.Utils;
+using DumpDrive.Domain.Factories;
+using DumpDrive.Presentation.Factories;
 
 namespace DumpDrive.Presentation.Actions
 {
@@ -9,14 +12,36 @@ namespace DumpDrive.Presentation.Actions
 
         public void Execute()
         {
-            Console.Write("Enter your email: ");
-            var email = Console.ReadLine();
-            Console.Write("Enter your password: ");
-            var password = Console.ReadLine();
+            var userRepository = RepositoryFactory.Create<UserRepository>();
 
-            // Add your authentication logic here
+            string email;
+            while (true)
+            {
+                if (!Reader.TryReadLine("Enter your email: ", out email) || !ValidationHelper.IsValidEmail(email))
+                {
+                    Console.WriteLine("Invalid email format. Please try again.");
+                    continue;
+                }
+                break;
+            }
+
+            string password;
+            if (!Reader.TryReadLine("Enter your password: ", out password) || !ValidationHelper.IsValidPassword(password))
+            {
+                Console.WriteLine("Password must be at least 6 characters long.");
+                return;
+            }
+
             Console.WriteLine($"Attempting to log in with email: {email}");
-            Console.WriteLine("Press any key to return to the menu.");
+            var user = userRepository.GetByEmailAndPassword(email, password);
+            if (user != null)
+            {
+                Console.WriteLine("Login successful! Welcome.");
+                var mainMenu = new MainMenu();
+                mainMenu.Execute();
+            }
+            else Console.WriteLine("Invalid email or password. Please try again.");
+
             Console.ReadKey();
         }
     }

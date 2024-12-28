@@ -41,30 +41,9 @@ namespace DumpDrive.Presentation.Utils
                 return false;
             return true;
         }
-        public static bool DoYouWantToContinue(string message)
-        {
-            Console.WriteLine($"Are you sure you want to send this message {message}, if so press y");
-            var input = Console.ReadLine();
-            if (input == "y")
-                return true;
-            return false;
-        }
-        public static void ReadInput(string message, out string input)
-        {
-            Console.WriteLine(message);
-            input = Console.ReadLine() ?? string.Empty;
-        }
         public static void ReadInput(out string input)
         {
             input = Console.ReadLine() ?? string.Empty;
-        }
-        public static bool NewMessage(out string message)
-        {
-            Console.WriteLine("Write the message you want to send.");
-            message = Console.ReadLine();
-            if (message == null || string.IsNullOrWhiteSpace(message))
-                return false;
-            return true;
         }
         public static string? ReadInput()
         {

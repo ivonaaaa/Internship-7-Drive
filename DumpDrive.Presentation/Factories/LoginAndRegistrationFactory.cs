@@ -4,7 +4,7 @@ using DumpDrive.Presentation.Utils;
 
 namespace DumpDrive.Presentation.Factories
 {
-    public class LoginAndRegistrationFactory
+    public class LoginAndRegistration
     {
         public IMenuAction CreateLoginAndRegisterMenu()
         {
