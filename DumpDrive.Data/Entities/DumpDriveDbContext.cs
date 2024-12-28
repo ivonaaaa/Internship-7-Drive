@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using DumpDrive.Data.Entities.Models;
 using DumpDrive.Data.Seeds;
