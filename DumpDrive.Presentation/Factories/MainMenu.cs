@@ -26,7 +26,7 @@ namespace DumpDrive.Presentation.Factories
                     new MyDrive(_driveRepository).Create(_userId),
                     //new SharedWithMe(),
                     //new ProfileSettings(),
-                    //new Logout()
+                    new Logout()
                 }
             };
 
