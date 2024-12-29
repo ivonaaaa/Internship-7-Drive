@@ -24,7 +24,7 @@ namespace DumpDrive.Presentation.Utils
         {
             line = string.Empty;
 
-            Console.WriteLine(message);
+            Console.Write(message);
             var input = Console.ReadLine();
             var isEmpty = string.IsNullOrWhiteSpace(input);
 
@@ -35,7 +35,7 @@ namespace DumpDrive.Presentation.Utils
         }
         public static bool DoYouWantToContinue()
         {
-            Console.WriteLine("If you want to go back to previous page press y");
+            Console.Write("If you want to go back to previous page press y");
             var input = Console.ReadLine();
             if (input == "y")
                 return false;

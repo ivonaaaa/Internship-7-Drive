@@ -1,33 +1,36 @@
-﻿using DumpDrive.Presentation.Abstractions;
+﻿using DumpDrive.Domain.Repositories;
+using DumpDrive.Presentation.Abstractions;
+using DumpDrive.Presentation.Actions;
 using DumpDrive.Presentation.Utils;
 
 namespace DumpDrive.Presentation.Factories
 {
-    public class MainMenu : IMenuAction
+    public class MainMenu
     {
-        public string Name { get; set; } = "Main";
-        public IList<IAction> Actions { get; set; }
-        public int MenuIndex { get; set; }
+        private readonly DriveRepository _driveRepository;
+        private readonly int _userId;
 
-        public MainMenu()
+        public MainMenu(DriveRepository driveRepository, int userId)
         {
-            Actions = new List<IAction>
-            {
-                //new mydrive(),
-                //new sharedwithme(),
-                //new profilesettings(),
-                //new logout()
-            };
+            _driveRepository = driveRepository;
+            _userId = userId;
         }
 
-        public void Execute()
+        public IMenuAction CreateMainMenu()
         {
-            var menuGenerator = new MenuGenerator
+            var menu = new MenuGenerator
             {
                 Name = "Main",
-                Actions = Actions
+                Actions = new List<IAction>
+                {
+                    new MyDrive(_driveRepository).Create(_userId),
+                    //new SharedWithMe(),
+                    //new ProfileSettings(),
+                    //new Logout()
+                }
             };
-            menuGenerator.Execute();
+
+            return menu;
         }
     }
 }

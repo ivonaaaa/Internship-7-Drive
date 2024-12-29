@@ -13,6 +13,7 @@ namespace DumpDrive.Presentation.Actions
         public void Execute()
         {
             var userRepository = RepositoryFactory.Create<UserRepository>();
+            var driveRepository = RepositoryFactory.Create<DriveRepository>();
 
             while (true)
             {
@@ -38,7 +39,7 @@ namespace DumpDrive.Presentation.Actions
                     Console.WriteLine($"Login successful! Welcome, {user.Username}.\n\nPress any key to continue...");
                     Console.ReadKey();
                     Console.Clear();
-                    var mainMenu = new MainMenu();
+                    var mainMenu = new MainMenu(driveRepository, user.Id).CreateMainMenu();
                     mainMenu.Execute();
                     break;
                 }
