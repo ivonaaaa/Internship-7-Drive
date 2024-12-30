@@ -34,5 +34,13 @@ namespace DumpDrive.Domain.Repositories
         public User? GetByEmailAndPassword(string email, string password) => DbContext.Users.FirstOrDefault(u => u.Password == password && u.Email == email);
         public User? GetById(int id) => DbContext.Users.FirstOrDefault(u => u.Id == id);
         public User? GetByEmail(string email) => DbContext.Users.FirstOrDefault(u => u.Email == email);
+
+        public IEnumerable<User> GetAllUsersExcept(int currentUserId)
+        {
+            return DbContext.Users
+                .Where(u => u.Id != currentUserId)
+                .ToList();
+        }
+
     }
 }
