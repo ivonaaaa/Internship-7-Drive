@@ -1,33 +1,32 @@
 ﻿using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Actions;
+using DumpDrive.Presentation.Actions.Menus.ProfileSettings;
 using DumpDrive.Presentation.Utils;
 
 namespace DumpDrive.Presentation.Factories
 {
-    public class MainMenu
+    public class ProfileSettings
     {
-        private readonly DriveRepository _driveRepository;
         private readonly UserRepository _userRepository;
         private readonly int _userId;
 
-        public MainMenu(DriveRepository driveRepository, int userId)
+        public ProfileSettings(UserRepository userRepository, int userId)
         {
-            _driveRepository = driveRepository;
+            _userRepository = userRepository;
             _userId = userId;
         }
 
-        public IMenuAction CreateMainMenu()
+        public IMenuAction Create()
         {
             var menu = new MenuGenerator
             {
-                Name = "Main",
+                Name = "Profile Settings",
                 Actions = new List<IAction>
                 {
-                    new MyDrive(_driveRepository).Create(_userId),
-                    //new SharedWithMe(),
-                    new ProfileSettings(_userRepository, _userId).Create(),
-                    new Logout()
+                    new ChangeEmail(_userRepository, _userId),
+                    new ChangePassword(_userRepository, _userId),
+                    new Exit()
                 }
             };
 

@@ -15,7 +15,7 @@ namespace DumpDrive.Presentation.Factories
 
         public IAction Create(int userId)
         {
-            return new DisplayDriveContent(_driveRepository, userId);
+            return new HandleDriveContent(_driveRepository, userId);
         }
     }
 }

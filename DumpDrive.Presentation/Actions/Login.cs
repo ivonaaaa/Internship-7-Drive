@@ -17,19 +17,9 @@ namespace DumpDrive.Presentation.Actions
 
             while (true)
             {
-                string email;
-                if (!Reader.TryReadLine("Enter your email: ", out email) || !ValidationHelper.IsValidEmail(email))
-                {
-                    Console.WriteLine("Invalid email format. Please try again.");
-                    continue;
-                }
+                string email = Reader.ReadEmail();
 
-                string password;
-                if (!Reader.TryReadLine("Enter your password: ", out password))
-                {
-                    Console.WriteLine("Password cannot be empty.");
-                    continue;
-                }
+                string password = Reader.ReadPassword();
 
                 Console.WriteLine($"Attempting to log in with email: {email}");
 
@@ -45,7 +35,7 @@ namespace DumpDrive.Presentation.Actions
                 }
                 else
                 {
-                    Console.WriteLine("Invalid email or password. You must wait 30 seconds before trying again.");
+                    Writer.Error("Invalid email or password. You must wait 30 seconds before trying again.");
                     Thread.Sleep(30000);
                 }
             }

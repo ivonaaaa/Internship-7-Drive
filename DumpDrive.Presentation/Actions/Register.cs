@@ -15,60 +15,47 @@ namespace DumpDrive.Presentation.Actions
         {
             var userRepository = RepositoryFactory.Create<UserRepository>();
 
-            string email;
-            while (true)
-            {
-                if (!Reader.TryReadLine("Enter your email: ", out email) || !ValidationHelper.IsValidEmail(email))
-                {
-                    Console.WriteLine("Invalid email format. Please try again.");
-                    continue;
-                }
-                break;
-            }
-
+            string email = Reader.ReadEmail();
             var existingUser = userRepository.GetByEmail(email);
             if (existingUser != null)
             {
-                Console.WriteLine("This email is already registered.");
+                Writer.Error("This email is already registered.");
                 return;
             }
 
-            string password, confirmPassword;
+            string password = Reader.ReadPassword();
+            string confirmPassword;
             while (true)
             {
-                if (!Reader.TryReadLine("Enter your password: ", out password))
+                confirmPassword = Reader.ReadPassword();
+                if (password != confirmPassword)
                 {
-                    Console.WriteLine("Password cannot be empty.");
-                    continue;
-                }
-
-                if (!Reader.TryReadLine("Confirm your password: ", out confirmPassword) || password != confirmPassword)
-                {
-                    Console.WriteLine("Passwords do not match. Please try again.");
+                    Writer.Error("Passwords do not match. Please try again.");
                     continue;
                 }
                 break;
             }
 
-            string captcha = ValidationHelper.GenerateCaptcha();
-            Console.WriteLine($"Captcha: {captcha}");
+            string captcha = Writer.GenerateCaptcha();
+            Writer.Write($"Captcha: {captcha}");
             string captchaInput;
             while (true)
             {
-                if (!Reader.TryReadLine("Please enter the captcha: ", out captchaInput) || !ValidationHelper.IsCaptchaValid(captcha, captchaInput))
+                captchaInput = Reader.ReadLine("Please enter the captcha: ");
+                if (!ValidationHelper.IsCaptchaValid(captcha, captchaInput))
                 {
-                    Console.WriteLine("Captcha incorrect. Please try again.");
+                    Writer.Error("Captcha incorrect. Please try again.");
                     continue;
                 }
                 break;
             }
 
             var newUser = new User(email, password, email.Split('@')[0]);
-
             var result = userRepository.Add(newUser);
             if (result == ResponseResultType.Success)
-                Console.WriteLine("Registration successful! You can now log in.");
-            else Console.WriteLine("Registration failed. Please try again.");
+                Writer.Write("Registration successful! You can now log in.");
+            else
+                Writer.Error("Registration failed. Please try again.");
 
             Console.ReadKey();
         }

@@ -23,12 +23,6 @@ namespace DumpDrive.Presentation.Utils
 
                 if (int.TryParse(Console.ReadLine(), out int choice))
                 {
-                    //if (choice == 0)
-                    //{
-                    //    Console.WriteLine("Exiting...");
-                    //    break;
-                    //}
-
                     if (choice >= 1 && choice <= Actions.Count)
                         Actions[choice - 1].Execute();
                     else
