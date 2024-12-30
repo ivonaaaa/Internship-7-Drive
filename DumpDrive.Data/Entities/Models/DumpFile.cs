@@ -13,6 +13,7 @@ namespace DumpDrive.Data.Entities.Models
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
+        public ICollection<UserSharedFile> SharedUsers { get; set; } = new List<UserSharedFile>();
 
         public DumpFile(string name, int folderId)
         {

@@ -12,6 +12,8 @@ namespace DumpDrive.Data.Entities.Models
         public ICollection<Folder> Folders { get; set; } = new List<Folder>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
+        public ICollection<UserSharedFolder> SharedFolders { get; set; } = new List<UserSharedFolder>();
+        public ICollection<UserSharedFile> SharedFiles { get; set; } = new List<UserSharedFile>();
 
         public User(string email, string password, string username)
         {

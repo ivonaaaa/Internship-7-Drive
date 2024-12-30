@@ -10,6 +10,7 @@ namespace DumpDrive.Data.Entities.Models
         public User? Owner { get; set; }
         public SharedStatus Status { get; set; }
         public List<DumpFile> Files { get; set; } = new List<DumpFile>();
+        public ICollection<UserSharedFolder> SharedUsers { get; set; } = new List<UserSharedFolder>();
 
         public Folder(string name, int ownerId)
         {
