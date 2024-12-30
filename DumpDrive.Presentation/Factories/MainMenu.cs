@@ -11,9 +11,10 @@ namespace DumpDrive.Presentation.Factories
         private readonly UserRepository _userRepository;
         private readonly int _userId;
 
-        public MainMenu(DriveRepository driveRepository, int userId)
+        public MainMenu(DriveRepository driveRepository, UserRepository userRepository, int userId)
         {
             _driveRepository = driveRepository;
+            _userRepository = userRepository;
             _userId = userId;
         }
 

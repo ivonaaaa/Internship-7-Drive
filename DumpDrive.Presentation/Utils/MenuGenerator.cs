@@ -7,6 +7,7 @@ namespace DumpDrive.Presentation.Utils
         public string Name { get; set; }
         public IList<IAction> Actions { get; set; } = new List<IAction>();
         public int MenuIndex { get; set; }
+        public bool CanGoBack { get; set; } = false;
 
         public void Execute()
         {
@@ -19,10 +20,15 @@ namespace DumpDrive.Presentation.Utils
                 for (int i = 0; i < Actions.Count; i++)
                     Console.WriteLine($"{i + 1}. {Actions[i].Name}");
 
-                Console.Write("\nSelect an option: ");
+                if (CanGoBack)
+                    Console.WriteLine($"{Actions.Count + 1}. Go Back");
 
+                Console.Write("\nSelect an option: ");
                 if (int.TryParse(Console.ReadLine(), out int choice))
                 {
+                    if (CanGoBack && choice == Actions.Count + 1)
+                        return;
+
                     if (choice >= 1 && choice <= Actions.Count)
                         Actions[choice - 1].Execute();
                     else

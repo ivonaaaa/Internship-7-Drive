@@ -20,7 +20,7 @@ namespace DumpDrive.Presentation.Actions.Menus.ProfileSettings
         public void Execute()
         {
             Console.Clear();
-            Writer.Write("Change Email");
+            Writer.Write("Change Email...\n");
 
             string newEmail;
             while (true)
@@ -49,6 +49,8 @@ namespace DumpDrive.Presentation.Actions.Menus.ProfileSettings
                 Writer.Write("Email updated successfully.");
             }
             else Writer.Error("User not found.");
+
+            Console.ReadKey();
         }
     }
 }

@@ -25,9 +25,9 @@ namespace DumpDrive.Presentation.Factories
                 Actions = new List<IAction>
                 {
                     new ChangeEmail(_userRepository, _userId),
-                    new ChangePassword(_userRepository, _userId),
-                    new Exit()
-                }
+                    new ChangePassword(_userRepository, _userId)
+                },
+                CanGoBack = true
             };
 
             return menu;

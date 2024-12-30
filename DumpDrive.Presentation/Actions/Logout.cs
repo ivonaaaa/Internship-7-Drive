@@ -16,7 +16,7 @@ namespace DumpDrive.Presentation.Actions
         {
             Console.Clear();
             Console.WriteLine("\nYou have been logged out successfully." +
-                "\nPress any key to continue...");
+                "\n\nPress any key to continue...");
             Console.ReadKey();
 
             var homePageFactory = new LoginAndRegistration();

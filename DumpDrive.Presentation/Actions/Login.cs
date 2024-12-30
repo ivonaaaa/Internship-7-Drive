@@ -29,7 +29,7 @@ namespace DumpDrive.Presentation.Actions
                     Console.WriteLine($"Login successful! Welcome, {user.Username}.\n\nPress any key to continue...");
                     Console.ReadKey();
                     Console.Clear();
-                    var mainMenu = new MainMenu(driveRepository, user.Id).CreateMainMenu();
+                    var mainMenu = new MainMenu(driveRepository, userRepository, user.Id).CreateMainMenu();
                     mainMenu.Execute();
                     break;
                 }

@@ -20,7 +20,7 @@ namespace DumpDrive.Presentation.Actions.Menus.ProfileSettings
         public void Execute()
         {
             Console.Clear();
-            Writer.Write("Change Password");
+            Writer.Write("Change Password...\n");
 
             var newPassword = Reader.ReadPassword();
             var confirmPassword = Reader.ReadPassword();
@@ -48,6 +48,8 @@ namespace DumpDrive.Presentation.Actions.Menus.ProfileSettings
                 Writer.Write("Password updated successfully.");
             }
             else Writer.Error("User not found.");
+
+            Console.ReadKey();
         }
     }
 }
