@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DumpDrive.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedMigration : Migration
+    public partial class NewMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,12 +72,10 @@ namespace DumpDrive.Data.Migrations
                 values: new object[,]
                 {
                     { 2, 1 },
-                    { 3, 1 },
-                    { 5, 2 },
-                    { 7, 2 },
+                    { 4, 2 },
                     { 4, 3 },
                     { 6, 3 },
-                    { 1, 4 },
+                    { 6, 4 },
                     { 8, 4 }
                 });
 
@@ -87,12 +85,10 @@ namespace DumpDrive.Data.Migrations
                 values: new object[,]
                 {
                     { 2, 1 },
-                    { 3, 1 },
-                    { 5, 2 },
                     { 6, 2 },
+                    { 2, 3 },
                     { 4, 3 },
-                    { 1, 4 },
-                    { 7, 4 }
+                    { 4, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -120,6 +116,15 @@ namespace DumpDrive.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "UserSharedFolders",
+                columns: new[] { "FolderId", "UserId" },
+                values: new object[,]
+                {
+                    { 10, 1 },
+                    { 10, 2 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Comments",
                 columns: new[] { "Id", "Content", "CreatedAt", "FileId", "UserId" },
                 values: new object[] { 16, "Nice recipe!", new DateTime(2024, 12, 24, 10, 0, 0, 0, DateTimeKind.Utc), 12, 1 });
@@ -135,9 +140,14 @@ namespace DumpDrive.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "UserSharedFiles",
+                columns: new[] { "FileId", "UserId" },
+                values: new object[] { 12, 2 });
+
+            migrationBuilder.InsertData(
                 table: "UserSharedFolders",
                 columns: new[] { "FolderId", "UserId" },
-                values: new object[] { 8, 3 });
+                values: new object[] { 8, 4 });
 
             migrationBuilder.InsertData(
                 table: "AuditLogs",
@@ -157,6 +167,11 @@ namespace DumpDrive.Data.Migrations
                     { 15, "Love the game review!", new DateTime(2024, 12, 24, 10, 0, 0, 0, DateTimeKind.Utc), 11, 4 },
                     { 17, "Helpful notes!", new DateTime(2024, 12, 24, 10, 0, 0, 0, DateTimeKind.Utc), 13, 3 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "UserSharedFiles",
+                columns: new[] { "FileId", "UserId" },
+                values: new object[] { 10, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserSharedFiles_FileId",

@@ -13,64 +13,65 @@ namespace DumpDrive.Domain.Repositories
 
         public IEnumerable<Folder> GetSharedFolders(int userId)
         {
-            return DbContext.Set<Folder>()
-                .Include(f => f.Owner)
-                .Include(f => f.Files)
-                .Where(f => f.Status == SharedStatus.Shared && f.OwnerId != userId)
-                .ToList();
+            return DbContext.UserSharedFolders
+            .Where(uf => uf.UserId == userId)
+            .Select(uf => uf.Folder)
+            .ToList();
         }
 
         public IEnumerable<DumpFile> GetSharedFiles(int userId)
         {
-            return DbContext.Set<DumpFile>()
-                .Include(df => df.Folder)
-                .Where(df => df.Status == SharedStatus.Shared && df.Folder.OwnerId != userId)
+            return DbContext.UserSharedFiles
+            .Where(uf => uf.UserId == userId)
+            .Select(uf => uf.File)
+            .ToList();
+        }
+
+        public IEnumerable<DumpFile> GetSharedFilesInFolder(int folderId, int userId)
+        {
+            return DbContext.UserSharedFiles
+                .Where(uf => uf.UserId == userId && uf.File.FolderId == folderId)
+                .Select(uf => uf.File)
                 .ToList();
         }
 
-        public ResponseResultType ShareFolder(int folderId, int userId)
+        public ResponseResultType AddFolderShare(int folderId, int userId)
         {
-            var folder = DbContext.Set<Folder>().Find(folderId);
-            if (folder == null)
+            var user = DbContext.Users.FirstOrDefault(u => u.Id == userId);
+            var folder = DbContext.Folders.FirstOrDefault(f => f.Id == folderId);
+
+            if (user == null || folder == null)
                 return ResponseResultType.NotFound;
 
-            folder.Status = SharedStatus.Shared;
-            DbContext.SaveChanges();
-            return ResponseResultType.Success;
+            var existingEntry = DbContext.UserSharedFolders
+                .FirstOrDefault(uf => uf.FolderId == folderId && uf.UserId == userId);
+
+            if (existingEntry != null)
+                return ResponseResultType.NoChanges;
+
+            var shareEntry = new UserSharedFolder { FolderId = folderId, UserId = userId };
+            DbContext.UserSharedFolders.Add(shareEntry);
+
+            var filesInFolder = DbContext.Files.Where(f => f.FolderId == folderId).ToList();
+            foreach (var file in filesInFolder)
+            {
+                var fileShareEntry = new UserSharedFile { FileId = file.Id, UserId = userId };
+                DbContext.UserSharedFiles.Add(fileShareEntry);
+            }
+
+            return SaveChanges();
         }
 
-        public ResponseResultType ShareFile(int fileId, int userId)
+
+
+        public ResponseResultType AddFileShare(int fileId, int userId)
         {
-            var file = DbContext.Set<DumpFile>().Find(fileId);
-            if (file == null)
-                return ResponseResultType.NotFound;
+            var shareEntry = new UserSharedFile { FileId = fileId, UserId = userId };
+            DbContext.UserSharedFiles.Add(shareEntry);
 
-            file.Status = SharedStatus.Shared;
-            DbContext.SaveChanges();
-            return ResponseResultType.Success;
+            return SaveChanges();
         }
 
-        public ResponseResultType UnshareFolder(int folderId)
-        {
-            var folder = DbContext.Set<Folder>().Find(folderId);
-            if (folder == null)
-                return ResponseResultType.NotFound;
-
-            folder.Status = SharedStatus.Private;
-            DbContext.SaveChanges();
-            return ResponseResultType.Success;
-        }
-
-        public ResponseResultType UnshareFile(int fileId)
-        {
-            var file = DbContext.Set<DumpFile>().Find(fileId);
-            if (file == null)
-                return ResponseResultType.NotFound;
-
-            file.Status = SharedStatus.Private;
-            DbContext.SaveChanges();
-            return ResponseResultType.Success;
-        }
 
         public IEnumerable<Comment> GetComments(int fileId)
         {

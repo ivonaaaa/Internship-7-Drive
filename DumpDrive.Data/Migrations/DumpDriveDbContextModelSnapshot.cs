@@ -639,7 +639,7 @@ namespace DumpDrive.Data.Migrations
                         new
                         {
                             UserId = 2,
-                            FileId = 5
+                            FileId = 4
                         },
                         new
                         {
@@ -654,12 +654,12 @@ namespace DumpDrive.Data.Migrations
                         new
                         {
                             UserId = 1,
-                            FileId = 3
+                            FileId = 10
                         },
                         new
                         {
                             UserId = 2,
-                            FileId = 7
+                            FileId = 12
                         },
                         new
                         {
@@ -669,7 +669,7 @@ namespace DumpDrive.Data.Migrations
                         new
                         {
                             UserId = 4,
-                            FileId = 1
+                            FileId = 6
                         });
                 });
 
@@ -706,27 +706,27 @@ namespace DumpDrive.Data.Migrations
                         new
                         {
                             UserId = 4,
-                            FolderId = 7
-                        },
-                        new
-                        {
-                            UserId = 1,
-                            FolderId = 3
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            FolderId = 5
-                        },
-                        new
-                        {
-                            UserId = 3,
                             FolderId = 8
                         },
                         new
                         {
+                            UserId = 1,
+                            FolderId = 10
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            FolderId = 10
+                        },
+                        new
+                        {
+                            UserId = 3,
+                            FolderId = 2
+                        },
+                        new
+                        {
                             UserId = 4,
-                            FolderId = 1
+                            FolderId = 4
                         });
                 });
 

@@ -86,10 +86,12 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     HandleFileDeletion();
                     break;
                 case 7:
-                    HandleSharing();
+                    var folderId = Reader.ReadNumber("Enter folder ID to share: ");
+                    ShareContent(folderId, isFolder: true);
                     break;
                 case 8:
-                    HandleUnsharing();
+                    var fileId = Reader.ReadNumber("Enter file ID to share: ");
+                    ShareContent(fileId, isFolder: false);
                     break;
                 case 9:
                     return;
@@ -148,29 +150,6 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             PrintResult(deleteFileResult, "File deleted successfully.", "Failed to delete file.");
         }
 
-        private void HandleSharing()
-        {
-            Writer.Write("Share Options:" +
-                "\n1. Share Folder" +
-                "\n2. Share File");
-
-            var shareChoice = Reader.ReadNumber("\nEnter your choice: ");
-            if (shareChoice == 1)
-            {
-                var folderId = Reader.ReadNumber("Enter folder ID to share: ");
-                ShareContent(folderId, isFolder: true);
-            }
-            else if (shareChoice == 2)
-            {
-                var fileId = Reader.ReadNumber("Enter file ID to share: ");
-                ShareContent(fileId, isFolder: false);
-            }
-            else
-            {
-                Writer.Error("Invalid choice.");
-            }
-        }
-
         private void ShareContent(int contentId, bool isFolder)
         {
             var users = _userRepository.GetAllUsersExcept(_userId).ToList();
@@ -198,55 +177,15 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
 
             if (isFolder)
             {
-                result = _sharedRepository.ShareFolder(contentId, selectedUser.Id);
+                result = _sharedRepository.AddFolderShare(contentId, selectedUser.Id);
             }
             else
             {
-                result = _sharedRepository.ShareFile(contentId, selectedUser.Id);
+                result = _sharedRepository.AddFileShare(contentId, selectedUser.Id);
             }
 
             PrintResult(result, "Content shared successfully.", "Failed to share content.");
         }
-
-        private void HandleUnsharing()
-        {
-            Writer.Write("Unshare Options:" +
-                "\n1. Unshare Folder" +
-                "\n2. Unshare File");
-
-            var unshareChoice = Reader.ReadNumber("\nEnter your choice: ");
-            if (unshareChoice == 1)
-            {
-                var folderId = Reader.ReadNumber("Enter folder ID to unshare: ");
-                UnshareContent(folderId, isFolder: true);
-            }
-            else if (unshareChoice == 2)
-            {
-                var fileId = Reader.ReadNumber("Enter file ID to unshare: ");
-                UnshareContent(fileId, isFolder: false);
-            }
-            else
-            {
-                Writer.Error("Invalid choice.");
-            }
-        }
-
-        private void UnshareContent(int contentId, bool isFolder)
-        {
-            var result = ResponseResultType.NotFound;
-
-            if (isFolder)
-            {
-                result = _sharedRepository.UnshareFolder(contentId);
-            }
-            else
-            {
-                result = _sharedRepository.UnshareFile(contentId);
-            }
-
-            PrintResult(result, "Content unshared successfully.", "Failed to unshare content.");
-        }
-
 
         private void PrintResult(ResponseResultType result, string successMessage, string failureMessage)
         {

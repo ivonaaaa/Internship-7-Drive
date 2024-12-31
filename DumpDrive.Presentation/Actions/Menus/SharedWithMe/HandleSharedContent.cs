@@ -27,17 +27,33 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
             if (!sharedFolders.Any() && !sharedFiles.Any())
             {
-                Writer.Write("No shared content found.");
+                Writer.Write("No shared content found.\n\nPress any key to continue...");
+                Console.ReadKey();
                 return;
             }
 
-            Writer.Write("Shared Content:");
+            Writer.Write("Shared Folders:");
             foreach (var folder in sharedFolders)
             {
                 Writer.Write($"[Folder] {folder.Name}");
-                foreach (var file in folder.Files)
-                    Writer.Write($"\t[File] {file.Name} (Last changed: {file.LastChanged})");
+
+                var filesInFolder = _sharedRepository.GetSharedFilesInFolder(folder.Id, _userId);
+                foreach (var file in filesInFolder)
+                {
+                    Writer.Write($"  - [File] {file.Name}");
+                }
             }
+
+            var filesNotInFolders = sharedFiles.Where(file => !sharedFolders.Any(f => f.Files.Contains(file))).ToList();
+            if (filesNotInFolders.Any())
+            {
+                Writer.Write("\nShared Files (not in folders):");
+                foreach (var file in filesNotInFolders)
+                {
+                    Writer.Write($"  - [File] {file.Name}");
+                }
+            }
+
             ShowCommands();
         }
 

@@ -96,24 +96,24 @@ namespace DumpDrive.Data.Seeds
                     new UserSharedFolder { UserId = 1, FolderId = 2 },
                     new UserSharedFolder { UserId = 2, FolderId = 6 },
                     new UserSharedFolder { UserId = 3, FolderId = 4 },
-                    new UserSharedFolder { UserId = 4, FolderId = 7 },
-                    new UserSharedFolder { UserId = 1, FolderId = 3 },
-                    new UserSharedFolder { UserId = 2, FolderId = 5 },
-                    new UserSharedFolder { UserId = 3, FolderId = 8 },
-                    new UserSharedFolder { UserId = 4, FolderId = 1 }
+                    new UserSharedFolder { UserId = 4, FolderId = 8 },
+                    new UserSharedFolder { UserId = 1, FolderId = 10 },
+                    new UserSharedFolder { UserId = 2, FolderId = 10 },
+                    new UserSharedFolder { UserId = 3, FolderId = 2 },
+                    new UserSharedFolder { UserId = 4, FolderId = 4 }
                 });
 
             builder.Entity<UserSharedFile>()
                 .HasData(new List<UserSharedFile>
                 {
                     new UserSharedFile { UserId = 1, FileId = 2 },
-                    new UserSharedFile { UserId = 2, FileId = 5 },
+                    new UserSharedFile { UserId = 2, FileId = 4 },
                     new UserSharedFile { UserId = 3, FileId = 6 },
                     new UserSharedFile { UserId = 4, FileId = 8 },
-                    new UserSharedFile { UserId = 1, FileId = 3 },
-                    new UserSharedFile { UserId = 2, FileId = 7 },
+                    new UserSharedFile { UserId = 1, FileId = 10 },
+                    new UserSharedFile { UserId = 2, FileId = 12 },
                     new UserSharedFile { UserId = 3, FileId = 4 },
-                    new UserSharedFile { UserId = 4, FileId = 1 }
+                    new UserSharedFile { UserId = 4, FileId = 6 }
                 });
 
         }
