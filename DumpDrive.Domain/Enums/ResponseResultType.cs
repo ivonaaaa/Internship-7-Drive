@@ -7,6 +7,7 @@ namespace DumpDrive.Domain.Enums
         NotFound,
         AlreadyExists,
         NoChanges,
-        ValidationError
+        ValidationError,
+        Failure
     }
 }

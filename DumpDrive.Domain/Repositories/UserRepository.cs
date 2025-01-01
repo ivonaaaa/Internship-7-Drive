@@ -1,6 +1,7 @@
 ﻿using DumpDrive.Data.Entities;
 using DumpDrive.Data.Entities.Models;
 using DumpDrive.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DumpDrive.Domain.Repositories
 {
@@ -8,6 +9,12 @@ namespace DumpDrive.Domain.Repositories
     {
         public UserRepository(DumpDriveDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            return DbContext.Users
+                .FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
         }
 
         public ResponseResultType Add(User user)

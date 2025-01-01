@@ -1,4 +1,6 @@
 ﻿
+using System.Text;
+
 namespace DumpDrive.Presentation.Utils
 {
     public class Reader
@@ -64,5 +66,31 @@ namespace DumpDrive.Presentation.Utils
             }
             return password;
         }
+
+        public static (string line, bool isBackspace) ReadInputWithBackspace()
+        {
+            var input = new StringBuilder();
+            while (true)
+            {
+                var key = Console.ReadKey(intercept: true);
+
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine();
+                    break;
+                }
+                else if (key.Key == ConsoleKey.Backspace)
+                {
+                    return (null, true);
+                }
+                else
+                {
+                    input.Append(key.KeyChar);
+                    Console.Write(key.KeyChar);
+                }
+            }
+            return (input.ToString().Trim(), false);
+        }
+
     }
 }

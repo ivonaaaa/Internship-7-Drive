@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace DumpDrive.Data.Entities.Models
+﻿namespace DumpDrive.Data.Entities.Models
 {
     public class DumpFile
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Content { get; set; }
         public DateTime LastChanged { get; set; }
         public int FolderId { get; set; }
         public Folder? Folder { get; set; }
@@ -18,7 +17,8 @@ namespace DumpDrive.Data.Entities.Models
         public DumpFile(string name, int folderId)
         {
             Name = name;
-            LastChanged = DateTime.Now;
+            Content = "";
+            LastChanged = DateTime.UtcNow;
             FolderId = folderId;
             Status = SharedStatus.Private;
         }

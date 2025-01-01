@@ -1,7 +1,6 @@
 ﻿using DumpDrive.Data.Entities;
 using DumpDrive.Data.Entities.Models;
 using DumpDrive.Domain.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace DumpDrive.Domain.Repositories
 {
@@ -62,8 +61,6 @@ namespace DumpDrive.Domain.Repositories
             return SaveChanges();
         }
 
-
-
         public ResponseResultType AddFileShare(int fileId, int userId)
         {
             var shareEntry = new UserSharedFile { FileId = fileId, UserId = userId };
@@ -72,6 +69,35 @@ namespace DumpDrive.Domain.Repositories
             return SaveChanges();
         }
 
+        public ResponseResultType RemoveFolderShare(int folderId, int userId)
+        {
+            var share = DbContext.UserSharedFolders
+                                .FirstOrDefault(fs => fs.FolderId == folderId && fs.UserId == userId);
+
+            if (share != null)
+            {
+                DbContext.UserSharedFolders.Remove(share);
+                DbContext.SaveChanges();
+                return ResponseResultType.Success;
+            }
+
+            return ResponseResultType.NotFound;
+        }
+
+        public ResponseResultType RemoveFileShare(int fileId, int userId)
+        {
+            var share = DbContext.UserSharedFiles
+                                 .FirstOrDefault(fs => fs.FileId == fileId && fs.UserId == userId);
+
+            if (share != null)
+            {
+                DbContext.UserSharedFiles.Remove(share);
+                DbContext.SaveChanges();
+                return ResponseResultType.Success;
+            }
+
+            return ResponseResultType.NotFound;
+        }
 
         public IEnumerable<Comment> GetComments(int fileId)
         {

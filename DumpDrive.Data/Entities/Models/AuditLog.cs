@@ -17,7 +17,7 @@ namespace DumpDrive.Data.Entities.Models
             ChangeType = changeType;
             FileId = fileId;
             ChangedByUserId = changedByUserId;
-            Timestamp = DateTime.Now;
+            Timestamp = DateTime.UtcNow;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace DumpDrive.Data.Entities.Models
             Content = content;
             FileId = fileId;
             UserId = userId;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
         }
     }
 }
