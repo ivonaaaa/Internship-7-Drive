@@ -146,6 +146,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             Writer.PrintResult(createFileResult, "File created successfully.", "Failed to create file.");
         }
 
+        //ode neka bude switch a ne miljun ovih if
         private void HandleFolderNavigation(string command)
         {
             var folderName = command.Substring("enter folder".Length).Trim();

@@ -158,8 +158,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
         {
             while (true)
             {
-                Writer.Write("\nEnter command:");
-                var command = Console.ReadLine()?.Trim().ToLower();
+                var command = Reader.ReadLine("\nEnter a command (or type 'help'): ").Trim().ToLower();
 
                 if (string.IsNullOrEmpty(command))
                 {
@@ -192,7 +191,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
         private void ShowFileCommands()
         {
-            Writer.Write("Available file commands:\n" +
+            Writer.Write("File commands:\n" +
                 "edit file [name] - Edits the specified file\n" +
                 "enter file [name] - Displays the contents of the specified file\n" +
                 "back - Exits the folder view\n");
@@ -209,7 +208,8 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
             var fileName = parts;
 
-            var file = _sharedRepository.GetSharedFilesInFolder(0, _userId).FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+            var file = _sharedRepository.GetSharedFiles(_userId)
+                        .FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
 
             if (file == null)
             {
@@ -220,7 +220,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
             Writer.Write("Enter new content for the file:");
             var newContent = Reader.ReadLine("New Content: ");
 
-            var result = _sharedRepository.UpdateFileContent(file.Id, newContent);
+            var result = _sharedRepository.UpdateFileContent(file.Id, _userId, newContent);
 
             if (result == ResponseResultType.Success)
                 Writer.PrintResult(ResponseResultType.Success, "File content updated.", "");
@@ -239,17 +239,127 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
             var fileName = parts;
 
-            var file = _sharedRepository.GetSharedFilesInFolder(0, _userId).FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+            var file = _sharedRepository.GetAccessibleFiles(_userId)
+                        .FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
 
             if (file == null)
             {
-                Writer.PrintResult(ResponseResultType.Failure, "", "File not found.");
+                Writer.PrintResult(ResponseResultType.Failure, "", "File not found or access denied.");
                 return;
             }
 
-            var content = _sharedRepository.GetFileContent(file.Id);
-            Writer.Write("File Content:");
-            Writer.Write(string.IsNullOrEmpty(content) ? "[Empty File]" : content);
+            Writer.Write($"Opening file: {file.Name}");
+            Writer.Write(file.Content);
+
+            while (true)
+            {
+                var fileCommand = Reader.ReadLine("\nEnter a command (or type 'help'): ").Trim().ToLower();
+
+                if (fileCommand == "help")
+                {
+                    Writer.Write("open comments - Get insight into this file's comments\n" +
+                        "back - Exits the file view");
+                }
+                if (fileCommand == "back")
+                {
+                    break;
+                }
+                else if (fileCommand == "open comments")
+                {
+                    DisplayComments(file.Id);
+                }
+            }
         }
+
+        private void DisplayComments(int fileId)
+        {
+            var comments = _sharedRepository.GetCommentsByFileId(fileId);
+
+            if (!comments.Any())
+            {
+                Writer.Write("No comments available for this file.");
+                return;
+            }
+
+            while (true)
+            {
+                Writer.Write("Comments:");
+                foreach (var comment in comments)
+                {
+                    Writer.Write($"{comment.Id}-{comment.User.Email}-{comment.CreatedAt}");
+                    Writer.Write($"   Content: {comment.Content}");
+                    Writer.Write(new string('-', 50));
+                }
+
+                Writer.Write("\nEnter command ('add comment', 'edit comment', 'delete comment', 'back'):");
+                var commandInput = Reader.ReadLine("> ").Trim().ToLower();
+
+                switch (commandInput)
+                {
+                    case "add comment":
+                        Writer.Write("Enter your comment:");
+                        var content = Reader.ReadLine("Content: ");
+                        var addResult = _sharedRepository.AddComment(fileId, _userId, content);
+
+                        Writer.PrintResult(addResult, "Comment added successfully.", "Failed to add comment.");
+                        if (addResult == ResponseResultType.Success)
+                        {
+                            comments = _sharedRepository.GetCommentsByFileId(fileId);
+                        }
+                        break;
+
+                    case "edit comment":
+                        Writer.Write("Enter the ID of the comment to edit:");
+                        var commentIdToEdit = Reader.ReadNumber("Comment ID: ");
+
+                        var commentToEdit = comments.FirstOrDefault(c => c.Id == commentIdToEdit);
+                        if (commentToEdit == null)
+                        {
+                            Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
+                            break;
+                        }
+
+                        Writer.Write("Enter new content for the comment:");
+                        var newContent = Reader.ReadLine("New Content: ");
+                        var editResult = _sharedRepository.UpdateComment(commentIdToEdit, newContent);
+
+                        Writer.PrintResult(editResult, "Comment updated successfully.", "Failed to update comment.");
+                        if (editResult == ResponseResultType.Success)
+                        {
+                            comments = _sharedRepository.GetCommentsByFileId(fileId);
+                        }
+                        break;
+
+                    case "delete comment":
+                        Writer.Write("Enter the ID of the comment to delete:");
+                        var commentIdToDelete = Reader.ReadNumber("Comment ID: ");
+
+                        var commentToDelete = comments.FirstOrDefault(c => c.Id == commentIdToDelete);
+                        if (commentToDelete == null)
+                        {
+                            Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
+                            break;
+                        }
+
+                        var deleteResult = _sharedRepository.DeleteComment(commentIdToDelete);
+
+                        Writer.PrintResult(deleteResult, "Comment deleted successfully.", "Failed to delete comment.");
+                        if (deleteResult == ResponseResultType.Success)
+                        {
+                            comments = _sharedRepository.GetCommentsByFileId(fileId);
+                        }
+                        break;
+
+                    case "back":
+                        Writer.Write("Returning to the file...");
+                        return;
+
+                    default:
+                        Writer.PrintResult(ResponseResultType.Failure, "", "Invalid command.");
+                        break;
+                }
+            }
+        }
+
     }
 }

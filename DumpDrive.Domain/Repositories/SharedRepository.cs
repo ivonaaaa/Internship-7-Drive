@@ -36,6 +36,17 @@ namespace DumpDrive.Domain.Repositories
                 .ToList();
         }
 
+        public IEnumerable<DumpFile> GetAccessibleFiles(int userId)
+        {
+            var ownedFiles = DbContext.Files.Where(f => f.Folder.OwnerId == userId);
+
+            var sharedFiles = DbContext.UserSharedFiles
+                                .Where(sf => sf.UserId == userId)
+                                .Select(sf => sf.File);
+
+            return ownedFiles.Union(sharedFiles).ToList();
+        }
+
         public ResponseResultType AddFolderShare(int folderId, int userId)
         {
             var user = DbContext.Users.FirstOrDefault(u => u.Id == userId);
@@ -119,9 +130,10 @@ namespace DumpDrive.Domain.Repositories
             return SaveChanges();
         }
 
-        public IEnumerable<Comment> GetComments(int fileId)
+        public IEnumerable<Comment> GetCommentsByFileId(int fileId)
         {
             return DbContext.Comments
+                .Include(c => c.User)
                 .Where(c => c.FileId == fileId)
                 .OrderByDescending(c => c.CreatedAt)
                 .ToList();
@@ -149,7 +161,7 @@ namespace DumpDrive.Domain.Repositories
                 return ResponseResultType.NotFound;
 
             comment.Content = newContent;
-            comment.CreatedAt = DateTime.Now;
+            comment.CreatedAt = DateTime.UtcNow;
             return SaveChanges();
         }
 
@@ -171,14 +183,20 @@ namespace DumpDrive.Domain.Repositories
                 .ToList();
         }
 
-        public ResponseResultType UpdateFileContent(int fileId, string newContent)
+        public ResponseResultType UpdateFileContent(int fileId, int userId, string newContent)
         {
             var file = DbContext.Files.FirstOrDefault(f => f.Id == fileId);
-
             if (file == null)
                 return ResponseResultType.NotFound;
 
+            var hasAccess = DbContext.UserSharedFiles.Any(uf => uf.FileId == fileId && uf.UserId == userId)
+                            || file.Folder.OwnerId == userId;
+
+            if (!hasAccess)
+                return ResponseResultType.NotFound;
+
             file.Content = newContent;
+            file.LastChanged = DateTime.UtcNow;
             return SaveChanges();
         }
 
