@@ -80,7 +80,30 @@ namespace DumpDrive.Domain.Repositories
             };
             DbContext.Files.Add(file);
 
-            return SaveChanges();
+            var hasChanges = DbContext.SaveChanges() > 0;
+            if (!hasChanges)
+            {
+                return ResponseResultType.Failure;
+            }
+
+            var sharedUsers = DbContext.UserSharedFolders
+                .Where(uf => uf.FolderId == folderId)
+                .Select(uf => uf.UserId)
+                .ToList();
+
+            foreach (var sharedUserId in sharedUsers)
+            {
+                var fileShareEntry = new UserSharedFile
+                {
+                    FileId = file.Id,
+                    UserId = sharedUserId
+                };
+                DbContext.UserSharedFiles.Add(fileShareEntry);
+            }
+
+            DbContext.SaveChanges();
+
+            return ResponseResultType.Success;
         }
 
         public ResponseResultType UpdateFileContent(int fileId, string newContent)

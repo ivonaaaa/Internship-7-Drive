@@ -71,6 +71,20 @@ namespace DumpDrive.Domain.Repositories
                 DbContext.UserSharedFiles.Add(fileShareEntry);
             }
 
+            var usersWithFolderAccess = DbContext.UserSharedFolders
+                .Where(uf => uf.FolderId == folderId)
+                .Select(uf => uf.UserId)
+                .ToList();
+
+            foreach (var sharedUserId in usersWithFolderAccess)
+            {
+                foreach (var file in filesInFolder)
+                {
+                    var fileShareEntry = new UserSharedFile { FileId = file.Id, UserId = sharedUserId };
+                    DbContext.UserSharedFiles.Add(fileShareEntry);
+                }
+            }
+
             return SaveChanges();
         }
 

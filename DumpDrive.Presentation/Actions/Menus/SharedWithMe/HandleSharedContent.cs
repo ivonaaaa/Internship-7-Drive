@@ -75,6 +75,12 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                 case var cmd when cmd.StartsWith("enter folder"):
                     EnterFolder(command);
                     break;
+                case var cmd when cmd.StartsWith("edit file"):
+                    EditFile(command);
+                    break;
+                case var cmd when cmd.StartsWith("enter file"):
+                    EnterFile(command);
+                    break;
                 case "back":
                     return;
                 default:
@@ -92,6 +98,8 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
             Console.WriteLine("Folder commands:\n" +
                 "remove folder [name] - Remove a folder from your view\n" +
                 "enter folder [name] - Enter a folder and view its contents\n" +
+                "edit file [name] - Edit the specified file\n" +
+                "enter file [name] - Enter the specified file and see its contents\n" +
                 "back - Go back to the previous menu\n");
         }
 
