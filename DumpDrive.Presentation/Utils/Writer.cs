@@ -26,8 +26,7 @@ namespace DumpDrive.Presentation.Utils
         {
             if (result == ResponseResultType.Success)
                 Writer.Write(successMessage);
-            else
-                Writer.Error(failureMessage);
+            else Writer.Error(failureMessage);
         }
     }
 }

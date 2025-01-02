@@ -39,9 +39,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
                 var filesInFolder = _sharedRepository.GetSharedFilesInFolder(folder.Id, _userId);
                 foreach (var file in filesInFolder)
-                {
                     Writer.Write($"\t[File] {file.Name}");
-                }
             }
 
             var filesNotInFolders = sharedFiles.Where(file => !sharedFolders.Any(f => f.Files.Contains(file))).ToList();
@@ -49,9 +47,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
             {
                 Writer.Write("\nShared Files (not in folders):");
                 foreach (var file in filesNotInFolders)
-                {
                     Writer.Write($"\t[File] {file.Name}");
-                }
             }
 
             Start();
@@ -125,8 +121,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
             if (result == ResponseResultType.Success)
                 Writer.PrintResult(ResponseResultType.Success, "Folder removed from view.", "");
-            else
-                Writer.PrintResult(ResponseResultType.Failure, "", "Failed to remove folder.");
+            else Writer.PrintResult(ResponseResultType.Failure, "", "Failed to remove folder.");
         }
 
         private void EnterFolder(string command)
@@ -215,7 +210,6 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
             }
 
             var fileName = parts;
-
             var file = _sharedRepository.GetSharedFiles(_userId)
                         .FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
 
@@ -232,8 +226,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
             if (result == ResponseResultType.Success)
                 Writer.PrintResult(ResponseResultType.Success, "File content updated.", "");
-            else
-                Writer.PrintResult(ResponseResultType.Failure, "", "Failed to update file content.");
+            else Writer.PrintResult(ResponseResultType.Failure, "", "Failed to update file content.");
         }
 
         private void EnterFile(string command)
@@ -269,13 +262,9 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                         "back - Exits the file view");
                 }
                 if (fileCommand == "back")
-                {
                     break;
-                }
                 else if (fileCommand == "open comments")
-                {
                     DisplayComments(file.Id);
-                }
             }
         }
 
@@ -311,9 +300,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
                         Writer.PrintResult(addResult, "Comment added successfully.", "Failed to add comment.");
                         if (addResult == ResponseResultType.Success)
-                        {
                             comments = _sharedRepository.GetCommentsByFileId(fileId);
-                        }
                         break;
 
                     case "edit comment":
@@ -333,9 +320,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
                         Writer.PrintResult(editResult, "Comment updated successfully.", "Failed to update comment.");
                         if (editResult == ResponseResultType.Success)
-                        {
                             comments = _sharedRepository.GetCommentsByFileId(fileId);
-                        }
                         break;
 
                     case "delete comment":
@@ -353,9 +338,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
                         Writer.PrintResult(deleteResult, "Comment deleted successfully.", "Failed to delete comment.");
                         if (deleteResult == ResponseResultType.Success)
-                        {
                             comments = _sharedRepository.GetCommentsByFileId(fileId);
-                        }
                         break;
 
                     case "back":

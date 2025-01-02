@@ -54,8 +54,7 @@ namespace DumpDrive.Presentation.Actions
             var result = userRepository.Add(newUser);
             if (result == ResponseResultType.Success)
                 Writer.Write("Registration successful! You can now log in.");
-            else
-                Writer.Error("Registration failed. Please try again.");
+            else Writer.Error("Registration failed. Please try again.");
 
             Console.ReadKey();
         }

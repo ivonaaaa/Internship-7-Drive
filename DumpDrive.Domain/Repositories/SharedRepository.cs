@@ -213,13 +213,5 @@ namespace DumpDrive.Domain.Repositories
             file.LastChanged = DateTime.UtcNow;
             return SaveChanges();
         }
-
-        public string GetFileContent(int fileId)
-        {
-            var file = DbContext.Files.FirstOrDefault(f => f.Id == fileId);
-
-            return file?.Content ?? string.Empty;
-        }
-
     }
 }

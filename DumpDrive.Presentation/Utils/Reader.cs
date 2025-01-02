@@ -80,9 +80,7 @@ namespace DumpDrive.Presentation.Utils
                     break;
                 }
                 else if (key.Key == ConsoleKey.Backspace)
-                {
                     return (null, true);
-                }
                 else
                 {
                     input.Append(key.KeyChar);

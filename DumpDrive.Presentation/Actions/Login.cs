@@ -19,7 +19,6 @@ namespace DumpDrive.Presentation.Actions
             while (true)
             {
                 string email = Reader.ReadEmail();
-
                 string password = Reader.ReadPassword();
 
                 Console.WriteLine($"Attempting to log in with email: {email}");

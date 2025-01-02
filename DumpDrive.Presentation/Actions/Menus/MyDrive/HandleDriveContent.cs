@@ -41,9 +41,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
 
             Writer.Write("Your Drive Contents:");
             foreach (var folder in folders)
-            {
                 Writer.Write($"[Folder] {folder.Name}");
-            }
 
             Start();
         }
@@ -146,7 +144,6 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             Writer.PrintResult(createFileResult, "File created successfully.", "Failed to create file.");
         }
 
-        //ode neka bude switch a ne miljun ovih if
         private void HandleFolderNavigation(string command)
         {
             var folderName = command.Substring("enter folder".Length).Trim();
@@ -175,16 +172,9 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     Writer.Write("Files in this folder:");
                     var folderFilesList = folderFiles.ToList();
                     for (int i = 0; i < folderFilesList.Count; i++)
-                    {
                         Writer.Write($"\t[File] {folderFilesList[i].Name}");
-                    }
-
                 }
-                else
-                {
-                    Writer.Write("\nNo files in this folder.");
-                }
-
+                else Writer.Write("\nNo files in this folder.");
 
                 var userCommand = Reader.ReadLine("\nEnter a command (or type 'help'): ").Trim().ToLower();
 
@@ -193,40 +183,40 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     Writer.Error("You must type in a proper command.");
                     continue;
                 }
-                if (userCommand.Equals("help", StringComparison.OrdinalIgnoreCase))
-                {
-                    ShowFileHelp();
-                    continue;
-                }
 
-                if (userCommand.StartsWith("create file", StringComparison.OrdinalIgnoreCase))
+                switch (userCommand)
                 {
-                    HandleFileCreation(userCommand);
-                }
-                else if (userCommand.StartsWith("edit file", StringComparison.OrdinalIgnoreCase))
-                {
-                    HandleFileEditing(userCommand);
-                }
-                else if (userCommand.StartsWith("delete file", StringComparison.OrdinalIgnoreCase))
-                {
-                    HandleDeletion(userCommand);
-                }
-                else if (userCommand.StartsWith("rename file", StringComparison.OrdinalIgnoreCase))
-                {
-                    HandleRenaming(userCommand);
-                }
-                else if (userCommand.StartsWith("share file", StringComparison.OrdinalIgnoreCase))
-                {
-                    HandleShareContent(userCommand);
-                }
-                else if (userCommand.Equals("back", StringComparison.OrdinalIgnoreCase))
-                {
-                    Writer.Write("Exiting folder...");
-                    isInFolder = false;
-                }
-                else
-                {
-                    Writer.Error("Invalid command inside a folder.");
+                    case "help":
+                        ShowFileHelp();
+                        break;
+
+                    case string cmd when cmd.StartsWith("create file", StringComparison.OrdinalIgnoreCase):
+                        HandleFileCreation(userCommand);
+                        break;
+
+                    case string cmd when cmd.StartsWith("edit file", StringComparison.OrdinalIgnoreCase):
+                        HandleFileEditing(userCommand);
+                        break;
+
+                    case string cmd when cmd.StartsWith("delete file", StringComparison.OrdinalIgnoreCase):
+                        HandleDeletion(userCommand);
+                        break;
+
+                    case string cmd when cmd.StartsWith("rename file", StringComparison.OrdinalIgnoreCase):
+                        HandleRenaming(userCommand);
+                        break;
+
+                    case string cmd when cmd.StartsWith("share file", StringComparison.OrdinalIgnoreCase):
+                        HandleShareContent(userCommand);
+                        break;
+
+                    case "back":
+                        isInFolder = false;
+                        break;
+
+                    default:
+                        Writer.Error("Invalid command inside a folder.");
+                        break;
                 }
             }
         }
@@ -241,7 +231,6 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             }
 
             var oldNamePart = parts[0].Trim();
-
             var oldName = oldNamePart.Replace("rename folder", "").Replace("rename file", "").Trim();
             var newName = parts[1].Trim();
 
@@ -292,12 +281,9 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             {
                 Writer.Write("\nFile Content:");
                 for (int i = 0; i < fileContent.Count; i++)
-                {
                     Writer.Write($"{i + 1}: {fileContent[i]}");
-                }
 
                 Writer.Write("\nType in a new line, or press Backspace to delete one (':help' for commands):");
-
                 var input = Reader.ReadInputWithBackspace();
 
                 if (input.isBackspace)
@@ -308,10 +294,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                         Writer.Write($"Deleted line {currentLineIndex + 1}: {fileContent[currentLineIndex]}");
                         fileContent.RemoveAt(currentLineIndex);
                     }
-                    else
-                    {
-                        Writer.Error("No lines to delete.");
-                    }
+                    else Writer.Error("No lines to delete.");
                 }
                 else if (string.IsNullOrWhiteSpace(input.line))
                 {
@@ -319,19 +302,12 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     continue;
                 }
                 else if (input.line.StartsWith(":"))
-                {
                     HandleFileEditingCommand(input.line, ref isEditing, fileContent, file);
-                }
                 else
                 {
                     if (currentLineIndex < fileContent.Count)
-                    {
                         fileContent[currentLineIndex] = input.line;
-                    }
-                    else
-                    {
-                        fileContent.Add(input.line);
-                    }
+                    else fileContent.Add(input.line);
                     Writer.Write("Line added/updated.");
                     currentLineIndex++;
                 }
@@ -352,13 +328,8 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     var contentToSave = string.Join("\n", fileContent);
                     var saveResult = _driveRepository.UpdateFileContent(file.Id, contentToSave);
                     if (saveResult == ResponseResultType.Success)
-                    {
                         Writer.Write("File saved successfully.");
-                    }
-                    else
-                    {
-                        Writer.Error("Failed to save the file.");
-                    }
+                    else Writer.Error("Failed to save the file.");
                     isEditing = false;
                     break;
                 case ":exit":
