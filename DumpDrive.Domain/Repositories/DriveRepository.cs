@@ -27,7 +27,6 @@ namespace DumpDrive.Domain.Repositories
             }).ToList();
         }
 
-
         public ICollection<DumpFile> GetFolderFiles(int folderId)
         {
             return DbContext.Files

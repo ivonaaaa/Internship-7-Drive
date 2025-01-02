@@ -40,7 +40,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                 var filesInFolder = _sharedRepository.GetSharedFilesInFolder(folder.Id, _userId);
                 foreach (var file in filesInFolder)
                 {
-                    Writer.Write($"  - [File] {file.Name}");
+                    Writer.Write($"\t[File] {file.Name}");
                 }
             }
 
@@ -50,71 +50,206 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                 Writer.Write("\nShared Files (not in folders):");
                 foreach (var file in filesNotInFolders)
                 {
-                    Writer.Write($"  - [File] {file.Name}");
+                    Writer.Write($"\t[File] {file.Name}");
                 }
             }
 
-            ShowCommands();
+            Start();
         }
-
-        private void ShowCommands()
+        private void Start()
         {
-            Writer.Write("\nCommands:" +
-                "\n1. Comment on File" +
-                "\n2. View File Comments" +
-                "\n3. Exit to Main Menu");
-
-            var command = Reader.ReadNumber("\nEnter a command: ");
+            var command = Reader.ReadLine("\nEnter a command (or type 'help'): ").Trim().ToLower();
             HandleCommand(command);
         }
 
-        private void HandleCommand(int command)
+        private void HandleCommand(string command)
         {
             switch (command)
             {
-                case 1:
-                    HandleCommenting();
+                case "help":
+                    ShowFolderCommands();
                     break;
-                case 2:
-                    HandleViewComments();
+                case var cmd when cmd.StartsWith("remove folder"):
+                    RemoveFolder(command);
                     break;
-                case 3:
+                case var cmd when cmd.StartsWith("enter folder"):
+                    EnterFolder(command);
+                    break;
+                case "back":
                     return;
                 default:
                     Writer.Error("Invalid command.");
                     break;
             }
+
             Writer.Write("Press any key to continue...");
             Console.ReadKey();
             Execute();
         }
 
-        private void HandleCommenting()
+        private void ShowFolderCommands()
         {
-            var fileId = Reader.ReadNumber("Enter the ID of the file to comment on: ");
-            var content = Reader.ReadLine("Enter your comment: ");
-
-            var result = _sharedRepository.AddComment(fileId, _userId, content);
-
-            if (result == ResponseResultType.Success)
-                Writer.Write("Comment added successfully.");
-            else Writer.Error("Failed to add comment.");
+            Console.WriteLine("Folder commands:\n" +
+                "remove folder [name] - Remove a folder from your view\n" +
+                "enter folder [name] - Enter a folder and view its contents\n" +
+                "back - Go back to the previous menu\n");
         }
 
-        private void HandleViewComments()
+        private void RemoveFolder(string command)
         {
-            var fileId = Reader.ReadNumber("Enter the ID of the file to view comments: ");
-            var comments = _sharedRepository.GetComments(fileId);
+            var folderName = command.Substring("remove folder".Length).Trim();
 
-            if (!comments.Any())
+            if (string.IsNullOrWhiteSpace(folderName))
             {
-                Writer.Write("No comments found for this file.");
+                Writer.PrintResult(ResponseResultType.Failure, "", "Folder name cannot be empty.");
                 return;
             }
 
-            Writer.Write("Comments:");
-            foreach (var comment in comments)
-                Writer.Write($"[{comment.User?.Username}] {comment.Content} (Posted on: {comment.CreatedAt})");
+            var folder = _sharedRepository.GetSharedFolders(_userId).FirstOrDefault(f => f.Name.Equals(folderName, StringComparison.OrdinalIgnoreCase));
+
+            if (folder == null)
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "Folder not found.");
+                return;
+            }
+
+            var result = _sharedRepository.RemoveFolderFromView(folder.Id, _userId);
+
+            if (result == ResponseResultType.Success)
+                Writer.PrintResult(ResponseResultType.Success, "Folder removed from view.", "");
+            else
+                Writer.PrintResult(ResponseResultType.Failure, "", "Failed to remove folder.");
+        }
+
+        private void EnterFolder(string command)
+        {
+            var folderName = command.Substring("enter folder".Length).Trim();
+
+            if (string.IsNullOrWhiteSpace(folderName))
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "Folder name is required.");
+                return;
+            }
+
+            var folder = _sharedRepository.GetSharedFolders(_userId).FirstOrDefault(f => f.Name.Equals(folderName, StringComparison.OrdinalIgnoreCase));
+
+            if (folder == null)
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "Folder not found.");
+                return;
+            }
+
+            var files = _sharedRepository.GetFilesInFolder(folder.Id, _userId);
+
+            if (!files.Any())
+            {
+                Writer.Write("No files found in this folder.");
+                return;
+            }
+
+            Writer.Write("Files in folder:");
+            foreach (var file in files)
+                Writer.Write($"\t{file.Name}");
+
+            HandleFolderContents();
+        }
+
+        private void HandleFolderContents()
+        {
+            while (true)
+            {
+                Writer.Write("\nEnter command:");
+                var command = Console.ReadLine()?.Trim().ToLower();
+
+                if (string.IsNullOrEmpty(command))
+                {
+                    Writer.Error("Command cannot be empty.");
+                    continue;
+                }
+
+                switch (command)
+                {
+                    case "help":
+                        ShowFileCommands();
+                        break;
+                    case var cmd when cmd.StartsWith("edit file"):
+                        EditFile(command);
+                        break;
+                    case var cmd when cmd.StartsWith("enter file"):
+                        EnterFile(command);
+                        break;
+                    case "back":
+                        return;
+                    default:
+                        Writer.Error("Invalid command.");
+                        break;
+                }
+
+                Writer.Write("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        private void ShowFileCommands()
+        {
+            Writer.Write("Available file commands:\n" +
+                "edit file [name] - Edits the specified file\n" +
+                "enter file [name] - Displays the contents of the specified file\n" +
+                "back - Exits the folder view\n");
+        }
+
+        private void EditFile(string command)
+        {
+            var parts = command.Substring("edit file".Length).Trim();
+            if (string.IsNullOrWhiteSpace(parts))
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "File name is required.");
+                return;
+            }
+
+            var fileName = parts;
+
+            var file = _sharedRepository.GetSharedFilesInFolder(0, _userId).FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+
+            if (file == null)
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "File not found.");
+                return;
+            }
+
+            Writer.Write("Enter new content for the file:");
+            var newContent = Reader.ReadLine("New Content: ");
+
+            var result = _sharedRepository.UpdateFileContent(file.Id, newContent);
+
+            if (result == ResponseResultType.Success)
+                Writer.PrintResult(ResponseResultType.Success, "File content updated.", "");
+            else
+                Writer.PrintResult(ResponseResultType.Failure, "", "Failed to update file content.");
+        }
+
+        private void EnterFile(string command)
+        {
+            var parts = command.Substring("enter file".Length).Trim();
+            if (string.IsNullOrWhiteSpace(parts))
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "File name is required.");
+                return;
+            }
+
+            var fileName = parts;
+
+            var file = _sharedRepository.GetSharedFilesInFolder(0, _userId).FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+
+            if (file == null)
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "File not found.");
+                return;
+            }
+
+            var content = _sharedRepository.GetFileContent(file.Id);
+            Writer.Write("File Content:");
+            Writer.Write(string.IsNullOrEmpty(content) ? "[Empty File]" : content);
         }
     }
 }

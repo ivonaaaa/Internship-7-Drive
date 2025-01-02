@@ -1,4 +1,5 @@
 ﻿using DumpDrive.Data.Entities.Models;
+using DumpDrive.Domain.Enums;
 
 namespace DumpDrive.Presentation.Utils
 {
@@ -19,6 +20,14 @@ namespace DumpDrive.Presentation.Utils
             var random = new Random();
             const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Range(0, 6).Select(x => validChars[random.Next(validChars.Length)]).ToArray());
+        }
+
+        public static void PrintResult(ResponseResultType result, string successMessage, string failureMessage)
+        {
+            if (result == ResponseResultType.Success)
+                Writer.Write(successMessage);
+            else
+                Writer.Error(failureMessage);
         }
     }
 }

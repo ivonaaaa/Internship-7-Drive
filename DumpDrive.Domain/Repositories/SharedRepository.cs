@@ -1,6 +1,7 @@
 ﻿using DumpDrive.Data.Entities;
 using DumpDrive.Data.Entities.Models;
 using DumpDrive.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DumpDrive.Domain.Repositories
 {
@@ -30,6 +31,7 @@ namespace DumpDrive.Domain.Repositories
         {
             return DbContext.UserSharedFiles
                 .Where(uf => uf.UserId == userId && uf.File.FolderId == folderId)
+                .Include(uf => uf.File)
                 .Select(uf => uf.File)
                 .ToList();
         }
@@ -99,6 +101,24 @@ namespace DumpDrive.Domain.Repositories
             return ResponseResultType.NotFound;
         }
 
+        public ResponseResultType RemoveFolderFromView(int folderId, int userId)
+        {
+            var share = DbContext.UserSharedFolders.FirstOrDefault(fs => fs.FolderId == folderId && fs.UserId == userId);
+
+            if (share == null)
+                return ResponseResultType.NotFound;
+
+            var sharedFiles = DbContext.UserSharedFiles
+                .Where(uf => uf.File.FolderId == folderId && uf.UserId == userId)
+                .ToList();
+
+            DbContext.UserSharedFiles.RemoveRange(sharedFiles);
+
+            DbContext.UserSharedFolders.Remove(share);
+
+            return SaveChanges();
+        }
+
         public IEnumerable<Comment> GetComments(int fileId)
         {
             return DbContext.Comments
@@ -120,5 +140,54 @@ namespace DumpDrive.Domain.Repositories
 
             return ResponseResultType.Success;
         }
+
+        public ResponseResultType UpdateComment(int commentId, string newContent)
+        {
+            var comment = DbContext.Comments.FirstOrDefault(c => c.Id == commentId);
+
+            if (comment == null)
+                return ResponseResultType.NotFound;
+
+            comment.Content = newContent;
+            comment.CreatedAt = DateTime.Now;
+            return SaveChanges();
+        }
+
+        public ResponseResultType DeleteComment(int commentId)
+        {
+            var comment = DbContext.Comments.FirstOrDefault(c => c.Id == commentId);
+
+            if (comment == null)
+                return ResponseResultType.NotFound;
+
+            DbContext.Comments.Remove(comment);
+            return SaveChanges();
+        }
+
+        public IEnumerable<DumpFile> GetFilesInFolder(int folderId, int userId)
+        {
+            return DbContext.Files
+                .Where(f => f.FolderId == folderId && DbContext.UserSharedFiles.Any(sf => sf.FileId == f.Id && sf.UserId == userId))
+                .ToList();
+        }
+
+        public ResponseResultType UpdateFileContent(int fileId, string newContent)
+        {
+            var file = DbContext.Files.FirstOrDefault(f => f.Id == fileId);
+
+            if (file == null)
+                return ResponseResultType.NotFound;
+
+            file.Content = newContent;
+            return SaveChanges();
+        }
+
+        public string GetFileContent(int fileId)
+        {
+            var file = DbContext.Files.FirstOrDefault(f => f.Id == fileId);
+
+            return file?.Content ?? string.Empty;
+        }
+
     }
 }

@@ -44,10 +44,11 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             {
                 Writer.Write($"[Folder] {folder.Name}");
             }
-            ShowCommands();
+
+            Start();
         }
 
-        private void ShowCommands()
+        private void Start()
         {
             var command = Reader.ReadLine("\nEnter a command (or type 'help'): ").Trim().ToLower();
             HandleCommand(command);
@@ -106,9 +107,6 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                 "share folder [name] with [email] - Share a folder with a user by email\n" +
                 "unshare folder [name] with [email] - Stop sharing a folder with a user by email\n" +
                 "back - Go back to the previous menu\n");
-
-            var command = Reader.ReadLine("Enter a command: ");
-            HandleCommand(command.ToLower());
         }
 
         private void ShowFileHelp()
@@ -132,7 +130,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             }
 
             var createFolderResult = _driveRepository.CreateFolder(_userId, folderName);
-            PrintResult(createFolderResult, "Folder created successfully.", "Failed to create folder.");
+            Writer.PrintResult(createFolderResult, "Folder created successfully.", "Failed to create folder.");
         }
 
         private void HandleFileCreation(string command)
@@ -145,7 +143,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             }
 
             var createFileResult = _driveRepository.CreateFile(currentFolderId, fileName);  // koristimo currentFolderId
-            PrintResult(createFileResult, "File created successfully.", "Failed to create file.");
+            Writer.PrintResult(createFileResult, "File created successfully.", "Failed to create file.");
         }
 
         private void HandleFolderNavigation(string command)
@@ -241,10 +239,8 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                 return;
             }
 
-            // Uzimamo prvi dio komande (prije 'to')
             var oldNamePart = parts[0].Trim();
 
-            // Provjeravamo i uklanjamo početne riječi ('rename folder' ili 'rename file')
             var oldName = oldNamePart.Replace("rename folder", "").Replace("rename file", "").Trim();
             var newName = parts[1].Trim();
 
@@ -257,12 +253,12 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             if (command.StartsWith("rename folder"))
             {
                 var renameFolderResult = _driveRepository.RenameFolder(_userId, oldName, newName);
-                PrintResult(renameFolderResult, "Folder renamed successfully.", "Failed to rename folder.");
+                Writer.PrintResult(renameFolderResult, "Folder renamed successfully.", "Failed to rename folder.");
             }
             else if (command.StartsWith("rename file"))
             {
                 var renameFileResult = _driveRepository.RenameFile(_userId, oldName, newName);
-                PrintResult(renameFileResult, "File renamed successfully.", "Failed to rename file.");
+                Writer.PrintResult(renameFileResult, "File renamed successfully.", "Failed to rename file.");
             }
         }
 
@@ -392,12 +388,12 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             if (isFolder)
             {
                 var deleteFolderResult = _driveRepository.DeleteFolder(_userId, name);
-                PrintResult(deleteFolderResult, "Folder deleted successfully.", "Failed to delete folder.");
+                Writer.PrintResult(deleteFolderResult, "Folder deleted successfully.", "Failed to delete folder.");
             }
             else
             {
                 var deleteFileResult = _driveRepository.DeleteFile(_userId, name);
-                PrintResult(deleteFileResult, "File deleted successfully.", "Failed to delete file.");
+                Writer.PrintResult(deleteFileResult, "File deleted successfully.", "Failed to delete file.");
             }
         }
 
@@ -429,7 +425,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     return;
                 }
                 var result = _sharedRepository.AddFolderShare(folder.Id, user.Id);
-                PrintResult(result, "Folder shared successfully.", "Failed to share folder.");
+                Writer.PrintResult(result, "Folder shared successfully.", "Failed to share folder.");
             }
             else if (command.StartsWith("share file"))
             {
@@ -440,7 +436,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     return;
                 }
                 var result = _sharedRepository.AddFileShare(file.Id, user.Id);
-                PrintResult(result, "File shared successfully.", "Failed to share file.");
+                Writer.PrintResult(result, "File shared successfully.", "Failed to share file.");
             }
         }
 
@@ -472,7 +468,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     return;
                 }
                 var result = _sharedRepository.RemoveFolderShare(folder.Id, user.Id);
-                PrintResult(result, "Folder unshared successfully.", "Failed to unshare folder.");
+                Writer.PrintResult(result, "Folder unshared successfully.", "Failed to unshare folder.");
             }
             else if (command.StartsWith("unshare file"))
             {
@@ -483,16 +479,8 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     return;
                 }
                 var result = _sharedRepository.RemoveFileShare(file.Id, user.Id);
-                PrintResult(result, "File unshared successfully.", "Failed to unshare file.");
+                Writer.PrintResult(result, "File unshared successfully.", "Failed to unshare file.");
             }
-        }
-
-        private void PrintResult(ResponseResultType result, string successMessage, string failureMessage)
-        {
-            if (result == ResponseResultType.Success)
-                Writer.Write(successMessage);
-            else
-                Writer.Error(failureMessage);
         }
     }
 }
