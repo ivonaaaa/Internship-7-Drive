@@ -26,7 +26,7 @@ namespace DumpDrive.Presentation.Actions.Menus.ProfileSettings
             while (true)
             {
                 newEmail = Reader.ReadEmail();
-                if (_userRepository.GetByEmail(newEmail) != null)
+                if (_userRepository.GetUserByEmail(newEmail) != null)
                     Writer.Error("Email already in use. Please enter a different one.");
                 else break;
             }

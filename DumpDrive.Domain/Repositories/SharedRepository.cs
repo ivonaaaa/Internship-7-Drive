@@ -71,9 +71,7 @@ namespace DumpDrive.Domain.Repositories
                     .FirstOrDefault(sf => sf.FileId == file.Id && sf.UserId == userId);
 
                 if (fileShareEntry == null)
-                {
                     DbContext.UserSharedFiles.Add(new UserSharedFile { FileId = file.Id, UserId = userId });
-                }
             }
 
             return SaveChanges();
@@ -106,7 +104,6 @@ namespace DumpDrive.Domain.Repositories
                 .ToList();
 
             DbContext.UserSharedFiles.RemoveRange(sharedFiles);
-
             DbContext.UserSharedFolders.Remove(share);
 
             return SaveChanges();
@@ -114,8 +111,7 @@ namespace DumpDrive.Domain.Repositories
 
         public ResponseResultType RemoveFileShare(int fileId, int userId)
         {
-            var fileShare = DbContext.UserSharedFiles
-                                     .FirstOrDefault(fs => fs.FileId == fileId && fs.UserId == userId);
+            var fileShare = DbContext.UserSharedFiles.FirstOrDefault(fs => fs.FileId == fileId && fs.UserId == userId);
 
             if (fileShare == null)
                 return ResponseResultType.NotFound;
@@ -136,7 +132,6 @@ namespace DumpDrive.Domain.Repositories
                 .ToList();
 
             DbContext.UserSharedFiles.RemoveRange(sharedFiles);
-
             DbContext.UserSharedFolders.Remove(share);
 
             return SaveChanges();
@@ -201,8 +196,7 @@ namespace DumpDrive.Domain.Repositories
             if (file == null)
                 return ResponseResultType.NotFound;
 
-            var hasAccess = DbContext.UserSharedFiles.Any(uf => uf.FileId == fileId && uf.UserId == userId)
-                            || file.Folder.OwnerId == userId;
+            var hasAccess = DbContext.UserSharedFiles.Any(uf => uf.FileId == fileId && uf.UserId == userId) || file.Folder.OwnerId == userId;
 
             if (!hasAccess)
                 return ResponseResultType.NotFound;

@@ -21,7 +21,7 @@ namespace DumpDrive.Presentation.Actions
                 string email = Reader.ReadEmail();
                 string password = Reader.ReadPassword();
 
-                Console.WriteLine($"Attempting to log in with email: {email}");
+                Console.WriteLine($"\nAttempting to log in...");
 
                 var user = userRepository.GetByEmailAndPassword(email, password);
                 if (user != null)

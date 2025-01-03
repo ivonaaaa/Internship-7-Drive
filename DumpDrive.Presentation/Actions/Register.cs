@@ -16,7 +16,7 @@ namespace DumpDrive.Presentation.Actions
             var userRepository = RepositoryFactory.Create<UserRepository>();
 
             string email = Reader.ReadEmail();
-            var existingUser = userRepository.GetByEmail(email);
+            var existingUser = userRepository.GetUserByEmail(email);
             if (existingUser != null)
             {
                 Writer.Error("This email is already registered.");

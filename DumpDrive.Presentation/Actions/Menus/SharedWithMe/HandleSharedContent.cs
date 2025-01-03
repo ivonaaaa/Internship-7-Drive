@@ -1,4 +1,5 @@
-﻿using DumpDrive.Domain.Enums;
+﻿using DumpDrive.Data.Entities.Models;
+using DumpDrive.Domain.Enums;
 using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Utils;
@@ -92,11 +93,11 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
         private void ShowFolderCommands()
         {
             Console.WriteLine("Folder commands:\n" +
-                "remove folder [name] - Remove a folder from your view\n" +
-                "enter folder [name] - Enter a folder and view its contents\n" +
-                "edit file [name] - Edit the specified file\n" +
-                "enter file [name] - Enter the specified file and see its contents\n" +
-                "back - Go back to the previous menu\n");
+                " > remove folder [name] - Remove a folder from your view\n" +
+                " > enter folder [name] - Enter a folder and view its contents\n" +
+                " > edit file [name] - Edit the specified file\n" +
+                " > enter file [name] - Enter the specified file and see its contents\n" +
+                " > back - Go back to the previous menu\n");
         }
 
         private void RemoveFolder(string command)
@@ -150,9 +151,9 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                 return;
             }
 
-            Writer.Write("Files in folder:");
+            Writer.Write("Files in this folder:");
             foreach (var file in files)
-                Writer.Write($"\t{file.Name}");
+                Writer.Write($"\t[File] {file.Name}");
 
             HandleFolderContents();
         }
@@ -195,9 +196,9 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
         private void ShowFileCommands()
         {
             Writer.Write("File commands:\n" +
-                "edit file [name] - Edits the specified file\n" +
-                "enter file [name] - Displays the contents of the specified file\n" +
-                "back - Exits the folder view\n");
+                " > edit file [name] - Edits the specified file\n" +
+                " > enter file [name] - Displays the contents of the specified file\n" +
+                " > back - Exits the folder view\n");
         }
 
         private void EditFile(string command)
@@ -270,12 +271,11 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
         private void DisplayComments(int fileId)
         {
-            var comments = _sharedRepository.GetCommentsByFileId(fileId);
+            var comments = _sharedRepository.GetCommentsByFileId(fileId).ToList();
 
             if (!comments.Any())
             {
                 Writer.Write("No comments available for this file.");
-                return;
             }
 
             while (true)
@@ -294,51 +294,15 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                 switch (commandInput)
                 {
                     case "add comment":
-                        Writer.Write("Enter your comment:");
-                        var content = Reader.ReadLine("Content: ");
-                        var addResult = _sharedRepository.AddComment(fileId, _userId, content);
-
-                        Writer.PrintResult(addResult, "Comment added successfully.", "Failed to add comment.");
-                        if (addResult == ResponseResultType.Success)
-                            comments = _sharedRepository.GetCommentsByFileId(fileId);
+                        AddComment(fileId);
                         break;
 
                     case "edit comment":
-                        Writer.Write("Enter the ID of the comment to edit:");
-                        var commentIdToEdit = Reader.ReadNumber("Comment ID: ");
-
-                        var commentToEdit = comments.FirstOrDefault(c => c.Id == commentIdToEdit);
-                        if (commentToEdit == null)
-                        {
-                            Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
-                            break;
-                        }
-
-                        Writer.Write("Enter new content for the comment:");
-                        var newContent = Reader.ReadLine("New Content: ");
-                        var editResult = _sharedRepository.UpdateComment(commentIdToEdit, newContent);
-
-                        Writer.PrintResult(editResult, "Comment updated successfully.", "Failed to update comment.");
-                        if (editResult == ResponseResultType.Success)
-                            comments = _sharedRepository.GetCommentsByFileId(fileId);
+                        EditComment(fileId, comments);
                         break;
 
                     case "delete comment":
-                        Writer.Write("Enter the ID of the comment to delete:");
-                        var commentIdToDelete = Reader.ReadNumber("Comment ID: ");
-
-                        var commentToDelete = comments.FirstOrDefault(c => c.Id == commentIdToDelete);
-                        if (commentToDelete == null)
-                        {
-                            Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
-                            break;
-                        }
-
-                        var deleteResult = _sharedRepository.DeleteComment(commentIdToDelete);
-
-                        Writer.PrintResult(deleteResult, "Comment deleted successfully.", "Failed to delete comment.");
-                        if (deleteResult == ResponseResultType.Success)
-                            comments = _sharedRepository.GetCommentsByFileId(fileId);
+                        DeleteComment(fileId, comments);
                         break;
 
                     case "back":
@@ -350,6 +314,56 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                         break;
                 }
             }
+        }
+
+        private void AddComment(int fileId)
+        {
+            var content = Reader.ReadLine("Enter your comment: ");
+            var addResult = _sharedRepository.AddComment(fileId, _userId, content);
+
+            Writer.PrintResult(addResult, "Comment added successfully.", "Failed to add comment.");
+
+            if (addResult == ResponseResultType.Success)
+            {
+                var comments = _sharedRepository.GetCommentsByFileId(fileId).ToList();
+                DisplayComments(fileId);
+            }
+        }
+
+        private void EditComment(int fileId, List<Comment> comments)
+        {
+            Writer.Write("Enter the ID of the comment to edit:");
+            var commentIdToEdit = Reader.ReadNumber("Comment ID: ");
+
+            var commentToEdit = comments.FirstOrDefault(c => c.Id == commentIdToEdit);
+            if (commentToEdit == null)
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
+                return;
+            }
+
+            Writer.Write("Enter new content for the comment:");
+            var newContent = Reader.ReadLine("New Content: ");
+            var editResult = _sharedRepository.UpdateComment(commentIdToEdit, newContent);
+
+            Writer.PrintResult(editResult, "Comment updated successfully.", "Failed to update comment.");
+        }
+
+        private void DeleteComment(int fileId, List<Comment> comments)
+        {
+            Writer.Write("Enter the ID of the comment to delete:");
+            var commentIdToDelete = Reader.ReadNumber("Comment ID: ");
+
+            var commentToDelete = comments.FirstOrDefault(c => c.Id == commentIdToDelete);
+            if (commentToDelete == null)
+            {
+                Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
+                return;
+            }
+
+            var deleteResult = _sharedRepository.DeleteComment(commentIdToDelete);
+
+            Writer.PrintResult(deleteResult, "Comment deleted successfully.", "Failed to delete comment.");
         }
 
     }

@@ -90,7 +90,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     break;
             }
 
-            Writer.Write("Press any key to continue...");
+            Writer.Write("\nPress any key to continue...");
             Console.ReadKey();
             Execute();
         }
@@ -98,25 +98,25 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
         private void ShowFolderHelp()
         {
             Writer.Write("Folder commands:\n" +
-                "create folder [folder name] - Create a folder at the current location\n" +
-                "enter folder [folder name] - Enter a folder and view its contents\n" +
-                "delete folder [name] - Delete a folder\n" +
-                "rename folder [name] to [new name] - Rename a folder\n" +
-                "share folder [name] with [email] - Share a folder with a user by email\n" +
-                "unshare folder [name] with [email] - Stop sharing a folder with a user by email\n" +
-                "back - Go back to the previous menu\n");
+                " > create folder [folder name] - Create a folder at the current location\n" +
+                " > enter folder [folder name] - Enter a folder and view its contents\n" +
+                " > delete folder [name] - Delete a folder\n" +
+                " > rename folder [name] to [new name] - Rename a folder\n" +
+                " > share folder [name] with [email] - Share a folder with a user by email\n" +
+                " > unshare folder [name] with [email] - Stop sharing a folder with a user by email\n" +
+                " > back - Go back to the previous menu\n");
         }
 
         private void ShowFileHelp()
         {
             Writer.Write("File commands:\n" +
-                "create file [name] - Create a file in this folder\n" +
-                "edit file [name] - Edit a file\n" +
-                "delete file [name] - Delete a file\n" +
-                "rename file [name] to [new name] - Rename a file\n" +
-                "share file [name] with [email] - Share a file\n" +
-                "unshare file [name] with [email] - Stop sharing a file\n" +
-                "back - Go back to the previous menu\n");
+                " > create file [name] - Create a file in this folder\n" +
+                " > edit file [name] - Edit a file\n" +
+                " > delete file [name] - Delete a file\n" +
+                " > rename file [name] to [new name] - Rename a file\n" +
+                " > share file [name] with [email] - Share a file\n" +
+                " > unshare file [name] with [email] - Stop sharing a file\n" +
+                " > back - Go back to the previous menu\n");
         }
 
         private void HandleFolderCreation(string command)
@@ -323,9 +323,9 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             {
                 case ":help":
                     Writer.Write("Editing commands:\n" +
-                        ":help - Show all commands\n" +
-                        ":save - Save changes and exit\n" +
-                        ":exit - Exit without saving\n");
+                        " > :help - Show all commands\n" +
+                        " > :save - Save changes and exit\n" +
+                        " > :exit - Exit without saving\n");
                     break;
                 case ":save":
                     var contentToSave = string.Join("\n", fileContent);
