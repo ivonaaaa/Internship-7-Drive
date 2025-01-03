@@ -67,21 +67,12 @@ namespace DumpDrive.Domain.Repositories
             var filesInFolder = DbContext.Files.Where(f => f.FolderId == folderId).ToList();
             foreach (var file in filesInFolder)
             {
-                var fileShareEntry = new UserSharedFile { FileId = file.Id, UserId = userId };
-                DbContext.UserSharedFiles.Add(fileShareEntry);
-            }
+                var fileShareEntry = DbContext.UserSharedFiles
+                    .FirstOrDefault(sf => sf.FileId == file.Id && sf.UserId == userId);
 
-            var usersWithFolderAccess = DbContext.UserSharedFolders
-                .Where(uf => uf.FolderId == folderId)
-                .Select(uf => uf.UserId)
-                .ToList();
-
-            foreach (var sharedUserId in usersWithFolderAccess)
-            {
-                foreach (var file in filesInFolder)
+                if (fileShareEntry == null)
                 {
-                    var fileShareEntry = new UserSharedFile { FileId = file.Id, UserId = sharedUserId };
-                    DbContext.UserSharedFiles.Add(fileShareEntry);
+                    DbContext.UserSharedFiles.Add(new UserSharedFile { FileId = file.Id, UserId = userId });
                 }
             }
 
@@ -90,6 +81,12 @@ namespace DumpDrive.Domain.Repositories
 
         public ResponseResultType AddFileShare(int fileId, int userId)
         {
+            var existingEntry = DbContext.UserSharedFiles
+                .FirstOrDefault(sf => sf.FileId == fileId && sf.UserId == userId);
+
+            if (existingEntry != null)
+                return ResponseResultType.NoChanges;
+
             var shareEntry = new UserSharedFile { FileId = fileId, UserId = userId };
             DbContext.UserSharedFiles.Add(shareEntry);
 
@@ -101,29 +98,30 @@ namespace DumpDrive.Domain.Repositories
             var share = DbContext.UserSharedFolders
                                 .FirstOrDefault(fs => fs.FolderId == folderId && fs.UserId == userId);
 
-            if (share != null)
-            {
-                DbContext.UserSharedFolders.Remove(share);
-                DbContext.SaveChanges();
-                return ResponseResultType.Success;
-            }
+            if (share == null)
+                return ResponseResultType.NotFound;
 
-            return ResponseResultType.NotFound;
+            var sharedFiles = DbContext.UserSharedFiles
+                .Where(uf => uf.File.FolderId == folderId && uf.UserId == userId)
+                .ToList();
+
+            DbContext.UserSharedFiles.RemoveRange(sharedFiles);
+
+            DbContext.UserSharedFolders.Remove(share);
+
+            return SaveChanges();
         }
 
         public ResponseResultType RemoveFileShare(int fileId, int userId)
         {
-            var share = DbContext.UserSharedFiles
-                                 .FirstOrDefault(fs => fs.FileId == fileId && fs.UserId == userId);
+            var fileShare = DbContext.UserSharedFiles
+                                     .FirstOrDefault(fs => fs.FileId == fileId && fs.UserId == userId);
 
-            if (share != null)
-            {
-                DbContext.UserSharedFiles.Remove(share);
-                DbContext.SaveChanges();
-                return ResponseResultType.Success;
-            }
+            if (fileShare == null)
+                return ResponseResultType.NotFound;
 
-            return ResponseResultType.NotFound;
+            DbContext.UserSharedFiles.Remove(fileShare);
+            return SaveChanges();
         }
 
         public ResponseResultType RemoveFolderFromView(int folderId, int userId)

@@ -110,11 +110,12 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
         private void ShowFileHelp()
         {
             Writer.Write("File commands:\n" +
-                "create file [file name] - Create a file in this folder\n" +
-                "edit file [file name] - Edit a file\n" +
-                "delete file [file name] - Delete a file\n" +
-                "rename file [file name] to [new name] - Rename a file\n" +
-                "share file [file name] with [email] - Share a file\n" +
+                "create file [name] - Create a file in this folder\n" +
+                "edit file [name] - Edit a file\n" +
+                "delete file [name] - Delete a file\n" +
+                "rename file [name] to [new name] - Rename a file\n" +
+                "share file [name] with [email] - Share a file\n" +
+                "unshare file [name] with [email] - Stop sharing a file\n" +
                 "back - Go back to the previous menu\n");
         }
 
@@ -209,7 +210,9 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     case string cmd when cmd.StartsWith("share file", StringComparison.OrdinalIgnoreCase):
                         HandleShareContent(userCommand);
                         break;
-
+                    case string cmd when cmd.StartsWith("unshare file", StringComparison.OrdinalIgnoreCase):
+                        HandleUnshareContent(userCommand);
+                        break;
                     case "back":
                         isInFolder = false;
                         break;
@@ -397,7 +400,8 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     return;
                 }
                 var result = _sharedRepository.AddFolderShare(folder.Id, user.Id);
-                Writer.PrintResult(result, "Folder shared successfully.", "Failed to share folder.");
+                Writer.PrintResult(result, "Folder shared successfully.",
+                    result == ResponseResultType.NoChanges ? "Folder is already shared with this user." : "Failed to share folder.");
             }
             else if (command.StartsWith("share file"))
             {
@@ -408,7 +412,8 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     return;
                 }
                 var result = _sharedRepository.AddFileShare(file.Id, user.Id);
-                Writer.PrintResult(result, "File shared successfully.", "Failed to share file.");
+                Writer.PrintResult(result, "File shared successfully.",
+                    result == ResponseResultType.NoChanges ? "File is already shared with this user." : "Failed to share file.");
             }
         }
 
