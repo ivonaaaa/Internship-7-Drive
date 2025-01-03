@@ -160,24 +160,30 @@ namespace DumpDrive.Domain.Repositories
             return ResponseResultType.Success;
         }
 
-        public ResponseResultType UpdateComment(int commentId, string newContent)
+        public ResponseResultType UpdateComment(int commentId, string newContent, int currentUserId)
         {
             var comment = DbContext.Comments.FirstOrDefault(c => c.Id == commentId);
 
             if (comment == null)
                 return ResponseResultType.NotFound;
+
+            if (comment.UserId != currentUserId)
+                return ResponseResultType.Failure;
 
             comment.Content = newContent;
             comment.CreatedAt = DateTime.UtcNow;
             return SaveChanges();
         }
 
-        public ResponseResultType DeleteComment(int commentId)
+        public ResponseResultType DeleteComment(int commentId, int currentUserId)
         {
             var comment = DbContext.Comments.FirstOrDefault(c => c.Id == commentId);
 
             if (comment == null)
                 return ResponseResultType.NotFound;
+
+            if (comment.UserId != currentUserId)
+                return ResponseResultType.Failure;
 
             DbContext.Comments.Remove(comment);
             return SaveChanges();

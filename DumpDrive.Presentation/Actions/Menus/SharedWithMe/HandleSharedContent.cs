@@ -203,16 +203,15 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
         private void EditFile(string command)
         {
-            var parts = command.Substring("edit file".Length).Trim();
-            if (string.IsNullOrWhiteSpace(parts))
+            var fileName = command.Substring("edit file".Length).Trim();
+            if (string.IsNullOrWhiteSpace(fileName))
             {
                 Writer.PrintResult(ResponseResultType.Failure, "", "File name is required.");
                 return;
             }
 
-            var fileName = parts;
             var file = _sharedRepository.GetSharedFiles(_userId)
-                        .FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+                            .FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
 
             if (file == null)
             {
@@ -220,14 +219,78 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                 return;
             }
 
-            Writer.Write("Enter new content for the file:");
-            var newContent = Reader.ReadLine("New Content: ");
+            Writer.Write($"Editing file: {file.Name}");
+            List<string> fileContent = file.Content
+                .Split('\n')
+                .Where(line => !string.IsNullOrWhiteSpace(line))
+                .ToList();
 
-            var result = _sharedRepository.UpdateFileContent(file.Id, _userId, newContent);
+            bool isEditing = true;
+            int currentLineIndex = fileContent.Count;
 
-            if (result == ResponseResultType.Success)
-                Writer.PrintResult(ResponseResultType.Success, "File content updated.", "");
-            else Writer.PrintResult(ResponseResultType.Failure, "", "Failed to update file content.");
+            while (isEditing)
+            {
+                Writer.Write("\nFile Content:");
+                for (int i = 0; i < fileContent.Count; i++)
+                    Writer.Write($"{i + 1}: {fileContent[i]}");
+
+                Writer.Write("\nType in a new line, or press Backspace to delete one (':help' for commands):");
+                var input = Reader.ReadInputWithBackspace();
+
+                if (input.isBackspace)
+                {
+                    if (currentLineIndex > 0)
+                    {
+                        currentLineIndex--;
+                        Writer.Write($"Deleted line {currentLineIndex + 1}: {fileContent[currentLineIndex]}");
+                        fileContent.RemoveAt(currentLineIndex);
+                    }
+                    else Writer.Error("No lines to delete.");
+                }
+                else if (string.IsNullOrWhiteSpace(input.line))
+                {
+                    Writer.Error("Invalid input.");
+                    continue;
+                }
+                else if (input.line.StartsWith(":"))
+                    HandleFileEditingCommand(input.line, ref isEditing, fileContent, file);
+                else
+                {
+                    if (currentLineIndex < fileContent.Count)
+                        fileContent[currentLineIndex] = input.line;
+                    else fileContent.Add(input.line);
+                    Writer.Write("Line added/updated.");
+                    currentLineIndex++;
+                }
+            }
+        }
+
+        private void HandleFileEditingCommand(string input, ref bool isEditing, List<string> fileContent, DumpFile file)
+        {
+            switch (input.ToLower())
+            {
+                case ":help":
+                    Writer.Write("Editing commands:\n" +
+                        " > :help - Show all commands\n" +
+                        " > :save - Save changes and exit\n" +
+                        " > :exit - Exit without saving\n");
+                    break;
+                case ":save":
+                    var contentToSave = string.Join("\n", fileContent);
+                    var saveResult = _sharedRepository.UpdateFileContent(file.Id, _userId, contentToSave);
+                    if (saveResult == ResponseResultType.Success)
+                        Writer.PrintResult(ResponseResultType.Success, "File saved successfully.", "");
+                    else Writer.Error("Failed to save the file.");
+                    isEditing = false;
+                    break;
+                case ":exit":
+                    Writer.Write("Exiting without saving...");
+                    isEditing = false;
+                    break;
+                default:
+                    Writer.PrintResult(ResponseResultType.Failure, "", "Unknown command.");
+                    break;
+            }
         }
 
         private void EnterFile(string command)
@@ -274,13 +337,11 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
             var comments = _sharedRepository.GetCommentsByFileId(fileId).ToList();
 
             if (!comments.Any())
-            {
                 Writer.Write("No comments available for this file.");
-            }
 
             while (true)
             {
-                Writer.Write("Comments:");
+                Writer.Write("\nComments:");
                 foreach (var comment in comments)
                 {
                     Writer.Write($"{comment.Id}-{comment.User.Email}-{comment.CreatedAt}");
@@ -288,7 +349,7 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                     Writer.Write(new string('-', 50));
                 }
 
-                Writer.Write("\nEnter command ('add comment', 'edit comment', 'delete comment', 'back'):");
+                Writer.Write("\nEnter command ('add comment', 'edit comment', 'delete comment', 'back'): ");
                 var commandInput = Reader.ReadLine("> ").Trim().ToLower();
 
                 switch (commandInput)
@@ -296,23 +357,20 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                     case "add comment":
                         AddComment(fileId);
                         break;
-
                     case "edit comment":
                         EditComment(fileId, comments);
                         break;
-
                     case "delete comment":
                         DeleteComment(fileId, comments);
                         break;
-
                     case "back":
                         Writer.Write("Returning to the file...");
                         return;
-
                     default:
                         Writer.PrintResult(ResponseResultType.Failure, "", "Invalid command.");
                         break;
                 }
+                comments = _sharedRepository.GetCommentsByFileId(fileId).ToList();
             }
         }
 
@@ -322,12 +380,6 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
             var addResult = _sharedRepository.AddComment(fileId, _userId, content);
 
             Writer.PrintResult(addResult, "Comment added successfully.", "Failed to add comment.");
-
-            if (addResult == ResponseResultType.Success)
-            {
-                var comments = _sharedRepository.GetCommentsByFileId(fileId).ToList();
-                DisplayComments(fileId);
-            }
         }
 
         private void EditComment(int fileId, List<Comment> comments)
@@ -344,9 +396,9 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
 
             Writer.Write("Enter new content for the comment:");
             var newContent = Reader.ReadLine("New Content: ");
-            var editResult = _sharedRepository.UpdateComment(commentIdToEdit, newContent);
+            var editResult = _sharedRepository.UpdateComment(commentIdToEdit, newContent, _userId);
 
-            Writer.PrintResult(editResult, "Comment updated successfully.", "Failed to update comment.");
+            Writer.PrintResult(editResult, "Comment updated successfully.", "You cannot edit another users comment.");
         }
 
         private void DeleteComment(int fileId, List<Comment> comments)
@@ -361,10 +413,9 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                 return;
             }
 
-            var deleteResult = _sharedRepository.DeleteComment(commentIdToDelete);
+            var deleteResult = _sharedRepository.DeleteComment(commentIdToDelete, _userId);
 
-            Writer.PrintResult(deleteResult, "Comment deleted successfully.", "Failed to delete comment.");
+            Writer.PrintResult(deleteResult, "Comment deleted successfully.", "You cannot delete another users comment.");
         }
-
     }
 }
