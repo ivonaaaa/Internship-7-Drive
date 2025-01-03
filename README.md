@@ -36,14 +36,28 @@ To get started with this project, you need to have the following installed on yo
 3. **PostgreSQL**: Install [PostgreSQL](https://www.postgresql.org/download/) and set up your database. Use [PgAdmin](https://www.pgadmin.org/) for managing your PostgreSQL database.
 
 Steps to Install the Project:
-1. **Clone the Repository**:
+1. **Clone and open the Repository**:
    Open a terminal (or command prompt on your machine) and run the following commands:
 
    ```bash
    git clone https://github.com/ivonaaaa/Internship-7-Drive.git
-   
+   ```
+   ```bash
    cd Internship-7-Drive
+   ```
+2. **Restore packages**:
+   Restore the NuGet packages required for the project:
+   ```bash
+   dotnet restore
+   ```
+3. **Navigate to the startup layer**:
+   ```bash
+   cd DumpDrive.Presentation
+   ```
+4. **Run the code**:
+   ```bash
+   dotnet run
+   ```
 
-2. **Set startup item**:
-   After opening the repository in Visual Studio, find the Program.cs file in the presentation layer. Right click on the file and choose option "Set as Startup Item".
-3. **Run the code**
+   
+   
