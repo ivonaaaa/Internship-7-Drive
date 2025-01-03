@@ -8,19 +8,21 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
 {
     public class HandleDriveContent : IAction
     {
-        private readonly DriveRepository _driveRepository;
-        private readonly SharedRepository _sharedRepository;
         private readonly UserRepository _userRepository;
         private readonly int _userId;
+        private readonly DriveRepository _driveRepository;
+        private readonly SharedRepository _sharedRepository;
+        private readonly JointActions _jointActions;
 
         public string Name => "Display Drive Contents";
 
-        public HandleDriveContent(DriveRepository driveRepository, SharedRepository sharedRepository, UserRepository userRepository, int userId)
+        public HandleDriveContent(UserRepository userRepository, int userId, DriveRepository driveRepository, SharedRepository sharedRepository, JointActions jointActions)
         {
-            _driveRepository = driveRepository;
-            _sharedRepository = sharedRepository;
             _userRepository = userRepository;
             _userId = userId;
+            _driveRepository = driveRepository;
+            _sharedRepository = sharedRepository;
+            _jointActions = jointActions;
         }
 
         private int currentFolderId;
@@ -57,7 +59,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             switch (command)
             {
                 case "help":
-                    ShowFolderHelp();
+                    ShowFolderCommands();
                     break;
                 case var cmd when cmd.StartsWith("create folder"):
                     HandleFolderCreation(command);
@@ -69,7 +71,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     HandleFolderNavigation(command);
                     break;
                 case var cmd when cmd.StartsWith("edit file"):
-                    HandleFileEditing(command);
+                    _jointActions.HandleFileEditing(command);
                     break;
                 case var cmd when cmd.StartsWith("delete folder") || cmd.StartsWith("delete file"):
                     HandleDeletion(command);
@@ -95,7 +97,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             Execute();
         }
 
-        private void ShowFolderHelp()
+        private void ShowFolderCommands()
         {
             Writer.Write("Folder commands:\n" +
                 " > create folder [folder name] - Create a folder at the current location\n" +
@@ -107,7 +109,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                 " > back - Go back to the previous menu\n");
         }
 
-        private void ShowFileHelp()
+        private void ShowFileCommands()
         {
             Writer.Write("File commands:\n" +
                 " > create file [name] - Create a file in this folder\n" +
@@ -133,7 +135,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             Writer.PrintResult(createFolderResult, "Folder created successfully.", "Failed to create folder.");
         }
 
-        private void HandleFileCreation(string command)
+        public void HandleFileCreation(string command)
         {
             var fileName = command.Substring("create file".Length).Trim();
             if (string.IsNullOrWhiteSpace(fileName))
@@ -189,23 +191,21 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                 switch (userCommand)
                 {
                     case "help":
-                        ShowFileHelp();
+                        ShowFileCommands();
                         break;
 
                     case string cmd when cmd.StartsWith("create file", StringComparison.OrdinalIgnoreCase):
                         HandleFileCreation(userCommand);
                         break;
-
                     case string cmd when cmd.StartsWith("edit file", StringComparison.OrdinalIgnoreCase):
-                        HandleFileEditing(userCommand);
+                        _jointActions.HandleFileEditing(userCommand);
                         break;
                     case string cmd when cmd.StartsWith("enter file", StringComparison.OrdinalIgnoreCase):
-                        EnterFile(userCommand);
+                        _jointActions.EnterFile(userCommand);
                         break;
                     case string cmd when cmd.StartsWith("delete file", StringComparison.OrdinalIgnoreCase):
                         HandleDeletion(userCommand);
                         break;
-
                     case string cmd when cmd.StartsWith("rename file", StringComparison.OrdinalIgnoreCase):
                         HandleRenaming(userCommand);
                         break;
@@ -222,6 +222,32 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                         Writer.Error("Invalid command inside a folder.");
                         break;
                 }
+            }
+        }
+
+        private void HandleDeletion(string command)
+        {
+            var isFolder = command.StartsWith("delete folder");
+
+            var name = isFolder
+                ? command.Substring("delete folder".Length).Trim()
+                : command.Substring("delete file".Length).Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Writer.Error("Name cannot be empty.");
+                return;
+            }
+
+            if (isFolder)
+            {
+                var deleteFolderResult = _driveRepository.DeleteFolder(_userId, name);
+                Writer.PrintResult(deleteFolderResult, "Folder deleted successfully.", "Failed to delete folder.");
+            }
+            else
+            {
+                var deleteFileResult = _driveRepository.DeleteFile(_userId, name);
+                Writer.PrintResult(deleteFileResult, "File deleted successfully.", "Failed to delete file.");
             }
         }
 
@@ -253,248 +279,6 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
             {
                 var renameFileResult = _driveRepository.RenameFile(_userId, oldName, newName);
                 Writer.PrintResult(renameFileResult, "File renamed successfully.", "Failed to rename file.");
-            }
-        }
-
-        private void HandleFileEditing(string command)
-        {
-            var fileName = command.Substring("edit file".Length).Trim();
-            if (string.IsNullOrWhiteSpace(fileName))
-            {
-                Writer.Error("File name cannot be empty.");
-                return;
-            }
-
-            var file = _driveRepository.GetFileByName(_userId, fileName);
-            if (file == null)
-            {
-                Writer.Error("File not found.");
-                return;
-            }
-
-            Writer.Write($"Editing file: {file.Name}");
-            List<string> fileContent = file.Content
-                .Split('\n')
-                .Where(line => !string.IsNullOrWhiteSpace(line))
-                .ToList();
-
-            bool isEditing = true;
-            int currentLineIndex = fileContent.Count;
-
-            while (isEditing)
-            {
-                Writer.Write("\nFile Content:");
-                for (int i = 0; i < fileContent.Count; i++)
-                    Writer.Write($"{i + 1}: {fileContent[i]}");
-
-                Writer.Write("\nType in a new line, or press Backspace to delete one (':help' for commands):");
-                var input = Reader.ReadInputWithBackspace();
-
-                if (input.isBackspace)
-                {
-                    if (currentLineIndex > 0)
-                    {
-                        currentLineIndex--;
-                        Writer.Write($"Deleted line {currentLineIndex + 1}: {fileContent[currentLineIndex]}");
-                        fileContent.RemoveAt(currentLineIndex);
-                    }
-                    else Writer.Error("No lines to delete.");
-                }
-                else if (string.IsNullOrWhiteSpace(input.line))
-                {
-                    Writer.Error("Invalid input.");
-                    continue;
-                }
-                else if (input.line.StartsWith(":"))
-                    HandleFileEditingCommand(input.line, ref isEditing, fileContent, file);
-                else
-                {
-                    if (currentLineIndex < fileContent.Count)
-                        fileContent[currentLineIndex] = input.line;
-                    else fileContent.Add(input.line);
-                    Writer.Write("Line added/updated.");
-                    currentLineIndex++;
-                }
-            }
-        }
-
-        private void HandleFileEditingCommand(string input, ref bool isEditing, List<string> fileContent, DumpFile file)
-        {
-            switch (input.ToLower())
-            {
-                case ":help":
-                    Writer.Write("Editing commands:\n" +
-                        " > :help - Show all commands\n" +
-                        " > :save - Save changes and exit\n" +
-                        " > :exit - Exit without saving\n");
-                    break;
-                case ":save":
-                    var contentToSave = string.Join("\n", fileContent);
-                    var saveResult = _driveRepository.UpdateFileContent(file.Id, contentToSave);
-                    if (saveResult == ResponseResultType.Success)
-                        Writer.Write("File saved successfully.");
-                    else Writer.Error("Failed to save the file.");
-                    isEditing = false;
-                    break;
-                case ":exit":
-                    Writer.Write("Exiting without saving...");
-                    isEditing = false;
-                    break;
-                default:
-                    fileContent.Add(input);
-                    Writer.Write("Content added to the file.");
-                    break;
-            }
-        }
-
-        private void EnterFile(string command)
-        {
-            var parts = command.Substring("enter file".Length).Trim();
-            if (string.IsNullOrWhiteSpace(parts))
-            {
-                Writer.PrintResult(ResponseResultType.Failure, "", "File name is required.");
-                return;
-            }
-
-            var fileName = parts;
-
-            var file = _sharedRepository.GetAccessibleFiles(_userId)
-                        .FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
-
-            if (file == null)
-            {
-                Writer.PrintResult(ResponseResultType.Failure, "", "File not found or access denied.");
-                return;
-            }
-
-            Writer.Write($"Opening file: {file.Name}");
-            Writer.Write(file.Content);
-
-            while (true)
-            {
-                var fileCommand = Reader.ReadLine("\nEnter a command (or type 'help'): ").Trim().ToLower();
-
-                if (fileCommand == "help")
-                {
-                    Writer.Write("open comments - Get insight into this file's comments\n" +
-                        "back - Exits the file view");
-                }
-                if (fileCommand == "back")
-                    break;
-                else if (fileCommand == "open comments")
-                    DisplayComments(file.Id);
-            }
-        }
-
-        private void DisplayComments(int fileId)
-        {
-            var comments = _sharedRepository.GetCommentsByFileId(fileId).ToList();
-
-            if (!comments.Any())
-                Writer.Write("No comments available for this file.");
-
-            while (true)
-            {
-                Writer.Write("\nComments:");
-                foreach (var comment in comments)
-                {
-                    Writer.Write($"{comment.Id}-{comment.User.Email}-{comment.CreatedAt}");
-                    Writer.Write($"   Content: {comment.Content}");
-                    Writer.Write(new string('-', 50));
-                }
-
-                Writer.Write("\nEnter command ('add comment', 'edit comment', 'delete comment', 'back'): ");
-                var commandInput = Reader.ReadLine("> ").Trim().ToLower();
-
-                switch (commandInput)
-                {
-                    case "add comment":
-                        AddComment(fileId);
-                        break;
-                    case "edit comment":
-                        EditComment(fileId, comments);
-                        break;
-                    case "delete comment":
-                        DeleteComment(fileId, comments);
-                        break;
-                    case "back":
-                        Writer.Write("Returning to the file...");
-                        return;
-                    default:
-                        Writer.PrintResult(ResponseResultType.Failure, "", "Invalid command.");
-                        break;
-                }
-                comments = _sharedRepository.GetCommentsByFileId(fileId).ToList();
-            }
-        }
-
-        private void AddComment(int fileId)
-        {
-            var content = Reader.ReadLine("Enter your comment: ");
-            var addResult = _sharedRepository.AddComment(fileId, _userId, content);
-
-            Writer.PrintResult(addResult, "Comment added successfully.", "Failed to add comment.");
-        }
-
-        private void EditComment(int fileId, List<Comment> comments)
-        {
-            Writer.Write("Enter the ID of the comment to edit:");
-            var commentIdToEdit = Reader.ReadNumber("Comment ID: ");
-
-            var commentToEdit = comments.FirstOrDefault(c => c.Id == commentIdToEdit);
-            if (commentToEdit == null)
-            {
-                Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
-                return;
-            }
-
-            Writer.Write("Enter new content for the comment:");
-            var newContent = Reader.ReadLine("New Content: ");
-            var editResult = _sharedRepository.UpdateComment(commentIdToEdit, newContent, _userId);
-
-            Writer.PrintResult(editResult, "Comment updated successfully.", "You cannot edit another users comment.");
-        }
-
-        private void DeleteComment(int fileId, List<Comment> comments)
-        {
-            Writer.Write("Enter the ID of the comment to delete:");
-            var commentIdToDelete = Reader.ReadNumber("Comment ID: ");
-
-            var commentToDelete = comments.FirstOrDefault(c => c.Id == commentIdToDelete);
-            if (commentToDelete == null)
-            {
-                Writer.PrintResult(ResponseResultType.Failure, "", "Invalid comment ID.");
-                return;
-            }
-
-            var deleteResult = _sharedRepository.DeleteComment(commentIdToDelete, _userId);
-
-            Writer.PrintResult(deleteResult, "Comment deleted successfully.", "You cannot delete another users comment.");
-        }
-
-        private void HandleDeletion(string command)
-        {
-            var isFolder = command.StartsWith("delete folder");
-
-            var name = isFolder
-                ? command.Substring("delete folder".Length).Trim()
-                : command.Substring("delete file".Length).Trim();
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                Writer.Error("Name cannot be empty.");
-                return;
-            }
-
-            if (isFolder)
-            {
-                var deleteFolderResult = _driveRepository.DeleteFolder(_userId, name);
-                Writer.PrintResult(deleteFolderResult, "Folder deleted successfully.", "Failed to delete folder.");
-            }
-            else
-            {
-                var deleteFileResult = _driveRepository.DeleteFile(_userId, name);
-                Writer.PrintResult(deleteFileResult, "File deleted successfully.", "Failed to delete file.");
             }
         }
 

@@ -1,23 +1,26 @@
 ﻿using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Actions;
+using DumpDrive.Presentation.Actions.Menus;
 using DumpDrive.Presentation.Utils;
 
 namespace DumpDrive.Presentation.Factories
 {
     public class MainMenu
     {
-        private readonly SharedRepository _sharedRepository;
-        private readonly DriveRepository _driveRepository;
         private readonly UserRepository _userRepository;
         private readonly int _userId;
+        private readonly DriveRepository _driveRepository;
+        private readonly SharedRepository _sharedRepository;
+        private readonly JointActions _jointActions;
 
-        public MainMenu(SharedRepository sharedRepository, DriveRepository driveRepository, UserRepository userRepository, int userId)
+        public MainMenu(UserRepository userRepository, int userId, DriveRepository driveRepository, SharedRepository sharedRepository, JointActions jointActions)
         {
-            _sharedRepository = sharedRepository;
-            _driveRepository = driveRepository;
             _userRepository = userRepository;
             _userId = userId;
+            _driveRepository = driveRepository;
+            _sharedRepository = sharedRepository;
+            _jointActions = jointActions;
         }
 
         public IMenuAction CreateMainMenu()
@@ -27,8 +30,8 @@ namespace DumpDrive.Presentation.Factories
                 Name = "Main",
                 Actions = new List<IAction>
                 {
-                    new MyDrive(_driveRepository, _sharedRepository, _userRepository).Create(_userId),
-                    new SharedWithMe(_sharedRepository).Create(_userId),
+                    new MyDrive(_userRepository, _userId, _driveRepository, _sharedRepository, _jointActions).Create(_userId),
+                    new SharedWithMe(_userId, _sharedRepository, _jointActions).Create(_userId),
                     new ProfileSettings(_userRepository, _userId).Create(),
                     new Logout()
                 }

@@ -3,6 +3,8 @@ using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Utils;
 using DumpDrive.Domain.Factories;
 using DumpDrive.Presentation.Factories;
+using DumpDrive.Presentation.Actions.Menus;
+using DumpDrive.Data.Entities.Models;
 
 namespace DumpDrive.Presentation.Actions
 {
@@ -29,8 +31,11 @@ namespace DumpDrive.Presentation.Actions
                     Console.WriteLine($"Login successful! Welcome, {user.Username}.\n\nPress any key to continue...");
                     Console.ReadKey();
                     Console.Clear();
-                    var mainMenu = new MainMenu(sharedRepository, driveRepository, userRepository, user.Id).CreateMainMenu();
+
+                    var jointActions = new JointActions(user.Id, driveRepository, sharedRepository);
+                    var mainMenu = new MainMenu(userRepository, user.Id, driveRepository, sharedRepository, jointActions).CreateMainMenu();
                     mainMenu.Execute();
+
                     break;
                 }
                 else
