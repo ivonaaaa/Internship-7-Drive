@@ -10,15 +10,15 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
     {
         private readonly int _userId;
         private readonly SharedRepository _sharedRepository;
-        private readonly JointActions _driveActions;
+        private readonly JointActions _jointActions;
 
         public string Name => "Shared With Me";
 
-        public HandleSharedContent(int userId, SharedRepository sharedRepository, JointActions driveActions)
+        public HandleSharedContent(int userId, SharedRepository sharedRepository, JointActions jointActions)
         {
             _userId = userId;
             _sharedRepository = sharedRepository;
-            _driveActions = driveActions;
+            _jointActions = jointActions;
         }
 
         public void Execute()
@@ -75,10 +75,10 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                     EnterFolder(command);
                     break;
                 case var cmd when cmd.StartsWith("edit file"):
-                    _driveActions.HandleFileEditing(command);
+                    _jointActions.HandleFileEditing(command);
                     break;
                 case var cmd when cmd.StartsWith("enter file"):
-                    _driveActions.EnterFile(command);
+                    _jointActions.EnterFile(command);
                     break;
                 case "back":
                     return;
@@ -186,10 +186,10 @@ namespace DumpDrive.Presentation.Actions.Menus.SharedWithMe
                         ShowFileCommands();
                         break;
                     case var cmd when cmd.StartsWith("edit file"):
-                        _driveActions.HandleFileEditing(command);
+                        _jointActions.HandleFileEditing(command);
                         break;
                     case var cmd when cmd.StartsWith("enter file"):
-                        _driveActions.EnterFile(command);
+                        _jointActions.EnterFile(command);
                         break;
                     case "back":
                         return;

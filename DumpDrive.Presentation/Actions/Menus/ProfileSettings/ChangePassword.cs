@@ -45,7 +45,7 @@ namespace DumpDrive.Presentation.Actions.Menus.ProfileSettings
             {
                 user.Password = newPassword;
                 _userRepository.Update(user, _userId);
-                Writer.Write("Password updated successfully.");
+                Writer.Write("Password updated successfully.\n\nPress any key to continue...");
             }
             else Writer.Error("User not found.");
 
