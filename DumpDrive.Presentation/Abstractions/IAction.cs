@@ -1,5 +1,4 @@
-﻿using DumpDrive.Data.Entities.Models;
-
+﻿
 namespace DumpDrive.Presentation.Abstractions
 {
     public interface IAction
@@ -8,3 +7,4 @@ namespace DumpDrive.Presentation.Abstractions
         void Execute();
     }
 }
+ 

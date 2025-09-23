@@ -1,8 +1,6 @@
 ﻿using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Abstractions;
-using DumpDrive.Presentation.Actions;
 using DumpDrive.Presentation.Actions.Menus.ProfileSettings;
-using DumpDrive.Presentation.Utils;
 
 namespace DumpDrive.Presentation.Factories
 {
@@ -19,7 +17,7 @@ namespace DumpDrive.Presentation.Factories
 
         public IMenuAction Create()
         {
-            var menu = new MenuGenerator
+            var menu = new BaseMenuAction
             {
                 Name = "Profile Settings",
                 Actions = new List<IAction>

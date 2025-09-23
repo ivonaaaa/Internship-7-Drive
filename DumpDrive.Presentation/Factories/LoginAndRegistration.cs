@@ -1,6 +1,5 @@
 ﻿using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Actions;
-using DumpDrive.Presentation.Utils;
 
 namespace DumpDrive.Presentation.Factories
 {
@@ -8,7 +7,7 @@ namespace DumpDrive.Presentation.Factories
     {
         public IMenuAction CreateLoginAndRegisterMenu()
         {
-            var menu = new MenuGenerator
+            var menu = new BaseMenuAction
             {
                 Name = "Login/Registration",
                 Actions = new List<IAction>

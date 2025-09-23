@@ -2,7 +2,6 @@
 using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Actions;
 using DumpDrive.Presentation.Actions.Menus;
-using DumpDrive.Presentation.Utils;
 
 namespace DumpDrive.Presentation.Factories
 {
@@ -25,7 +24,7 @@ namespace DumpDrive.Presentation.Factories
 
         public IMenuAction CreateMainMenu()
         {
-            var menu = new MenuGenerator
+            var menu = new BaseMenuAction
             {
                 Name = "Main",
                 Actions = new List<IAction>
