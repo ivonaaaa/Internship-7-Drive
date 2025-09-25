@@ -13,7 +13,7 @@ namespace DumpDrive.Domain.Repositories
 
         public User? GetById(int id) => DbContext.Users.FirstOrDefault(u => u.Id == id);
 
-        public User GetUserByEmail(string email) => DbContext.Users.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+        public User? GetUserByEmail(string email) => DbContext.Users.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
 
         public User? GetByEmailAndPassword(string email, string password) => DbContext.Users.FirstOrDefault(u => u.Password == password && u.Email == email);
 

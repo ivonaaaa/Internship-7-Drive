@@ -289,6 +289,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                 Writer.Error("Invalid share command. Correct format: share folder/file 'name' with 'email'.");
                 return;
             }
+
             var contentPart = parts[0].Trim();
             var contentName = contentPart.Replace("share folder", "").Replace("share file", "").Trim();
             var email = parts[1].Trim();
@@ -308,6 +309,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     Writer.Error("Folder not found.");
                     return;
                 }
+
                 var result = _sharedRepository.AddFolderShare(folder.Id, user.Id);
                 Writer.PrintResult(result, "Folder shared successfully.",
                     result == ResponseResultType.NoChanges ? "Folder is already shared with this user." : "Failed to share folder.");
@@ -320,6 +322,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     Writer.Error("File not found.");
                     return;
                 }
+
                 var result = _sharedRepository.AddFileShare(file.Id, user.Id);
                 Writer.PrintResult(result, "File shared successfully.",
                     result == ResponseResultType.NoChanges ? "File is already shared with this user." : "Failed to share file.");
@@ -334,6 +337,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                 Writer.Error("Invalid unshare command. Correct format: unshare folder/file 'name' with 'email'.");
                 return;
             }
+
             var contentPart = parts[0].Trim();
             var contentName = contentPart.Replace("unshare folder", "").Replace("unshare file", "").Trim();
             var email = parts[1].Trim();
@@ -353,6 +357,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     Writer.Error("Folder not found.");
                     return;
                 }
+
                 var result = _sharedRepository.RemoveFolderShare(folder.Id, user.Id);
                 Writer.PrintResult(result, "Folder unshared successfully.", "Failed to unshare folder.");
             }
@@ -364,6 +369,7 @@ namespace DumpDrive.Presentation.Actions.Menus.MyDrive
                     Writer.Error("File not found.");
                     return;
                 }
+
                 var result = _sharedRepository.RemoveFileShare(file.Id, user.Id);
                 Writer.PrintResult(result, "File unshared successfully.", "Failed to unshare file.");
             }

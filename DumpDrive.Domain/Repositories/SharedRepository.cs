@@ -38,7 +38,7 @@ namespace DumpDrive.Domain.Repositories
 
         public IEnumerable<DumpFile> GetAccessibleFiles(int userId)
         {
-            var ownedFiles = DbContext.Files.Where(f => f.Folder.OwnerId == userId);
+            var ownedFiles = DbContext.Files.Where(f => f.Folder != null && f.Folder.OwnerId == userId);
 
             var sharedFiles = DbContext.UserSharedFiles
                                 .Where(sf => sf.UserId == userId)
@@ -202,7 +202,7 @@ namespace DumpDrive.Domain.Repositories
             if (file == null)
                 return ResponseResultType.NotFound;
 
-            var hasAccess = DbContext.UserSharedFiles.Any(uf => uf.FileId == fileId && uf.UserId == userId) || file.Folder.OwnerId == userId;
+            var hasAccess = DbContext.UserSharedFiles.Any(uf => uf.FileId == fileId && uf.UserId == userId) || file.Folder != null && file.Folder.OwnerId == userId;
 
             if (!hasAccess)
                 return ResponseResultType.NotFound;

@@ -41,14 +41,14 @@ namespace DumpDrive.Domain.Repositories
                 .ToList();
         }
 
-        public Folder GetFolderByName(int userId, string folderName)
+        public Folder? GetFolderByName(int userId, string folderName)
         {
             return DbContext.Folders
                 .Where(f => f.OwnerId == userId && f.Name.ToLower() == folderName.ToLower())
                 .FirstOrDefault();
         }
 
-        public DumpFile GetFileByName(int userId, string fileName)
+        public DumpFile? GetFileByName(int userId, string fileName)
         {
             return DbContext.Files
                 .Where(f => f.Folder.OwnerId == userId && f.Name.ToLower() == fileName.ToLower())
@@ -80,12 +80,6 @@ namespace DumpDrive.Domain.Repositories
             };
             DbContext.Files.Add(file);
 
-            var hasChanges = DbContext.SaveChanges() > 0;
-            if (!hasChanges)
-            {
-                return ResponseResultType.Failure;
-            }
-
             var sharedUsers = DbContext.UserSharedFolders
                 .Where(uf => uf.FolderId == folderId)
                 .Select(uf => uf.UserId)
@@ -93,12 +87,11 @@ namespace DumpDrive.Domain.Repositories
 
             foreach (var sharedUserId in sharedUsers)
             {
-                var fileShareEntry = new UserSharedFile
+                DbContext.UserSharedFiles.Add(new UserSharedFile
                 {
-                    FileId = file.Id,
+                    File = file,
                     UserId = sharedUserId
-                };
-                DbContext.UserSharedFiles.Add(fileShareEntry);
+                });
             }
 
             DbContext.SaveChanges();
@@ -110,9 +103,7 @@ namespace DumpDrive.Domain.Repositories
         {
             var file = DbContext.Files.FirstOrDefault(f => f.Id == fileId);
             if (file == null)
-            {
                 return ResponseResultType.Failure;
-            }
 
             file.Content = newContent;
             file.LastChanged = DateTime.UtcNow;
