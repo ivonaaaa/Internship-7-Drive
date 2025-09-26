@@ -10,14 +10,21 @@ namespace DumpDrive.Presentation.Actions
 {
     public class Login : IAction
     {
-        public string Name { get; set; } = "Login";
+        private readonly UserRepository _userRepository;
+        private readonly DriveRepository _driveRepository;
+        private readonly SharedRepository _sharedRepository;
+
+        public string Name => "Login";
+
+        public Login(UserRepository userRepository, DriveRepository driveRepository, SharedRepository sharedRepository)
+        {
+            _userRepository = userRepository;
+            _driveRepository = driveRepository;
+            _sharedRepository = sharedRepository;
+        }
 
         public void Execute()
         {
-            var userRepository = RepositoryFactory.Create<UserRepository>();
-            var driveRepository = RepositoryFactory.Create<DriveRepository>();
-            var sharedRepository = RepositoryFactory.Create<SharedRepository>();
-
             while (true)
             {
                 string email = Reader.ReadEmail();
@@ -25,15 +32,15 @@ namespace DumpDrive.Presentation.Actions
 
                 Console.WriteLine($"\nAttempting to log in...");
 
-                var user = userRepository.GetByEmailAndPassword(email, password);
+                var user = _userRepository.GetByEmailAndPassword(email, password);
                 if (user != null)
                 {
                     Console.WriteLine($"Login successful! Welcome, {user.Username}.\n\nPress any key to continue...");
                     Console.ReadKey();
                     Console.Clear();
 
-                    var jointActions = new JointActions(user.Id, driveRepository, sharedRepository);
-                    var mainMenu = new MainMenu(userRepository, user.Id, driveRepository, sharedRepository, jointActions).CreateMainMenu();
+                    var jointActions = new JointActions(user.Id, _driveRepository, _sharedRepository);
+                    var mainMenu = new MainMenu(_userRepository, user.Id, _driveRepository, _sharedRepository, jointActions).CreateMainMenu();
                     mainMenu.Execute();
 
                     break;

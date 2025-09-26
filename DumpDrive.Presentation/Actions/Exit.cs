@@ -7,7 +7,7 @@ namespace DumpDrive.Presentation.Actions
     {
         public User User { get; set; }
         public int MenuIndex { get; set; }
-        public string Name { get; set; } = "Exit";
+        public string Name => "Exit";
 
         public Exit()
         {

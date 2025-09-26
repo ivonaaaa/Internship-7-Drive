@@ -32,7 +32,7 @@ namespace DumpDrive.Presentation.Factories
                     new MyDrive(_userRepository, _userId, _driveRepository, _sharedRepository, _jointActions).Create(_userId),
                     new SharedWithMe(_userId, _sharedRepository, _jointActions).Create(_userId),
                     new ProfileSettings(_userRepository, _userId).Create(),
-                    new Logout()
+                    new Logout(_userRepository, _driveRepository, _sharedRepository)
                 }
             };
 

@@ -1,7 +1,6 @@
 ﻿using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Utils;
-using DumpDrive.Domain.Factories;
 using DumpDrive.Data.Entities.Models;
 using DumpDrive.Domain.Enums;
 
@@ -9,14 +8,19 @@ namespace DumpDrive.Presentation.Actions
 {
     public class Register : IAction
     {
-        public string Name { get; set; } = "Register";
+        private readonly UserRepository _userRepository;
+
+        public string Name => "Register";
+
+        public Register(UserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
 
         public void Execute()
         {
-            var userRepository = RepositoryFactory.Create<UserRepository>();
-
             string email = Reader.ReadEmail();
-            var existingUser = userRepository.GetUserByEmail(email);
+            var existingUser = _userRepository.GetUserByEmail(email);
             if (existingUser != null)
             {
                 Writer.Error("This email is already registered.");
@@ -51,7 +55,7 @@ namespace DumpDrive.Presentation.Actions
             }
 
             var newUser = new User(email, password, email.Split('@')[0]);
-            var result = userRepository.Add(newUser);
+            var result = _userRepository.Add(newUser);
             if (result == ResponseResultType.Success)
                 Writer.Write("Registration successful! You can now log in.");
             else Writer.Error("Registration failed. Please try again.");
