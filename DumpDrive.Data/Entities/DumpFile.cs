@@ -1,4 +1,5 @@
-﻿namespace DumpDrive.Data.Entities
+﻿
+namespace DumpDrive.Data.Entities
 {
     public class DumpFile
     {

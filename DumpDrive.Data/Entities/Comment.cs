@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace DumpDrive.Data.Entities
 {
     public class Comment

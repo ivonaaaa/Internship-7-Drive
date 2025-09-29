@@ -1,5 +1,4 @@
-﻿using DumpDrive.Data.Entities;
-using DumpDrive.Domain.Enums;
+﻿using DumpDrive.Domain.Enums;
 
 namespace DumpDrive.Presentation.Utils
 {

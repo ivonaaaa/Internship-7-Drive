@@ -28,6 +28,7 @@ namespace DumpDrive.Presentation.Actions
             }
 
             string password = Reader.ReadPassword();
+            Writer.Write("\nPlease type in your password again to confirm... ");
             string confirmPassword;
             while (true)
             {
@@ -54,7 +55,11 @@ namespace DumpDrive.Presentation.Actions
                 break;
             }
 
-            var newUser = new User();
+            var newUser = new User {
+                Email = email,
+                Username = email.Split("@")[0],
+                Password = password
+            };
             var result = _userRepository.Add(newUser);
             if (result == ResponseResultType.Success)
                 Writer.Write("Registration successful! You can now log in.");

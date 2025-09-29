@@ -1,7 +1,6 @@
 ﻿using DumpDrive.Data;
 using DumpDrive.Data.Entities;
 using DumpDrive.Domain.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace DumpDrive.Domain.Repositories
 {

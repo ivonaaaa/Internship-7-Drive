@@ -1,6 +1,4 @@
-﻿using System;
-
-public enum ChangeType
+﻿public enum ChangeType
 {
     Created,
     Updated,
