@@ -1,4 +1,4 @@
-﻿using DumpDrive.Data.Entities.Models;
+﻿using DumpDrive.Data.Entities;
 using DumpDrive.Presentation.Abstractions;
 
 namespace DumpDrive.Presentation.Actions

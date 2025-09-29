@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DumpDrive.Data.Entities.Models
+namespace DumpDrive.Data.Entities
 {
-    public class UserSharedFolder
+    public class UserSharedFile
     {
         public int UserId { get; set; }
         public User User { get; set; }
-        public int FolderId { get; set; }
-        public Folder Folder { get; set; }
+        public int FileId { get; set; }
+        public DumpFile File { get; set; }
     }
 }

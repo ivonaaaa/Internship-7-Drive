@@ -1,4 +1,4 @@
-﻿using DumpDrive.Data.Entities;
+﻿using DumpDrive.Data;
 using DumpDrive.Domain.Enums;
 
 namespace DumpDrive.Domain.Repositories

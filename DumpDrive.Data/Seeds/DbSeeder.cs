@@ -1,4 +1,4 @@
-using DumpDrive.Data.Entities.Models;
+using DumpDrive.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DumpDrive.Data.Seeds
@@ -10,84 +10,84 @@ namespace DumpDrive.Data.Seeds
             builder.Entity<User>()
                 .HasData(new List<User>
                 {
-                    new User("ivona@gmail.com", "pass1", "ivona") { Id = 1 },
-                    new User("jure@gmail.com", "pass2", "jure") { Id = 2 },
-                    new User("bruno@gmail.com", "pass3", "bruno") { Id = 3 },
-                    new User("ana@gmail.com", "pass4", "ana") { Id = 4 },
-                    new User("leo@ffst.hr", "pass5", "leo") { Id = 5 },
-                    new User("hana@pmfst.chr", "pass6", "hana") { Id = 6 }
+                    new User() { Id = 1, Email = "ivona@gmail.com", Password = "pass1", Username = "ivona" },
+                    new User() { Id = 2, Email = "jure@gmail.com", Password = "pass2", Username = "jure" },
+                    new User() { Id = 3, Email = "bruno@gmail.com", Password = "pass3", Username = "bruno" },
+                    new User() { Id = 4, Email = "ana@gmail.com", Password = "pass4", Username = "ana" },
+                    new User() { Id = 5, Email = "leo@ffst.hr", Password = "pass5", Username = "leo" },
+                    new User() { Id = 6, Email = "hana@pmfst.chr", Password = "pass6", Username = "hana" }
                 });
 
             builder.Entity<Folder>()
                 .HasData(new List<Folder>
                 {
-                    new Folder("Documents", 1) { Id = 1, Status = SharedStatus.Private },
-                    new Folder("Photos", 2) { Id = 2, Status = SharedStatus.Shared },
-                    new Folder("Music", 3) { Id = 3, Status = SharedStatus.Private },
-                    new Folder("Videos", 4) { Id = 4, Status = SharedStatus.Shared },
-                    new Folder("Projects", 3) { Id = 5, Status = SharedStatus.Private },
-                    new Folder("Downloads", 2) { Id = 6, Status = SharedStatus.Shared },
-                    new Folder("Archives", 1) { Id = 7, Status = SharedStatus.Private },
-                    new Folder("Work", 5) { Id = 8, Status = SharedStatus.Shared },
-                    new Folder("Games", 6) { Id = 9, Status = SharedStatus.Private },
-                    new Folder("Recipes", 4) { Id = 10, Status = SharedStatus.Shared },
-                    new Folder("Notes", 6) { Id = 11, Status = SharedStatus.Private }
+                    new Folder() { Id = 1, Name = "Documents", OwnerId = 1, Status = SharedStatus.Private },
+                    new Folder() { Id = 2, Name = "Photos", OwnerId = 2, Status = SharedStatus.Shared },
+                    new Folder() { Id = 3, Name = "Music", OwnerId = 3, Status = SharedStatus.Private },
+                    new Folder() { Id = 4, Name = "Videos", OwnerId = 4, Status = SharedStatus.Shared },
+                    new Folder() { Id = 5, Name = "Projects", OwnerId = 3, Status = SharedStatus.Private },
+                    new Folder() { Id = 6, Name = "Downloads", OwnerId = 2, Status = SharedStatus.Shared },
+                    new Folder() { Id = 7, Name = "Archives", OwnerId = 1, Status = SharedStatus.Private },
+                    new Folder() { Id = 8, Name = "Work", OwnerId = 5, Status = SharedStatus.Shared },
+                    new Folder() { Id = 9, Name = "Games", OwnerId = 6, Status = SharedStatus.Private },
+                    new Folder() { Id = 10, Name = "Recipes", OwnerId = 4, Status = SharedStatus.Shared },
+                    new Folder() { Id = 11, Name = "Notes", OwnerId = 6, Status = SharedStatus.Private }
                 });
 
             builder.Entity<DumpFile>()
                 .HasData(new List<DumpFile>
                 {
-                    new DumpFile("resume.pdf", 1) { Id = 1, Content = "My resume. Lorem ipsum.", Status = SharedStatus.Private, LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new DumpFile("holiday.jpg", 2) { Id = 2, Content = "Image of a holiday memory!", Status = SharedStatus.Shared, LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new DumpFile("song.mp3", 3) { Id = 3, Content = "Never Gonna Give You Up", Status = SharedStatus.Private , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("movie.mp4", 4) { Id = 4, Content = "Movie: Interstellar", Status = SharedStatus.Shared , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("project_plan.docx", 5) { Id = 5, Content = "Plan for a project.", Status = SharedStatus.Private , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("presentation.pptx", 5) { Id = 6, Content = "A presentation about my project.", Status = SharedStatus.Shared , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("report.pdf", 6) { Id = 7, Content = "Report number 6.", Status = SharedStatus.Private , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("archive.zip", 7) { Id = 8, Content = "Here are saved some important documents.", Status = SharedStatus.Shared , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("data.csv", 7) { Id = 9, Content = "Seed data for my database.", Status = SharedStatus.Private , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("work_report.docx", 8) { Id = 10, Content = "Week 1: Number of working hours - 40\nWeek 2: Number of working hours - 38", Status = SharedStatus.Shared , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("game_review.txt", 9) { Id = 11, Content = "The game was fun to play but too many bad huys to fight", Status = SharedStatus.Private , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("recipe.pdf", 10) { Id = 12, Content = "Cookies: 2 eggs, flour, water, vanilla extract", Status = SharedStatus.Shared , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new DumpFile("notes.txt", 11) { Id = 13, Content = "Lorem ipsum.", Status = SharedStatus.Private , LastChanged = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)}
+                    new DumpFile() { Id = 1, Name = "resume.pdf", Content = "My resume. Lorem ipsum.", FolderId = 1, Status = SharedStatus.Private },
+                    new DumpFile() { Id = 2, Name = "holiday.jpg", Content = "Image of a holiday memory!", FolderId = 2, Status = SharedStatus.Shared },
+                    new DumpFile() { Id = 3, Name = "song.mp3", Content = "Never Gonna Give You Up", FolderId = 3, Status = SharedStatus.Private },
+                    new DumpFile() { Id = 4, Name = "movie.mp4", Content = "Movie: Interstellar", FolderId = 4, Status = SharedStatus.Shared },
+                    new DumpFile() { Id = 5, Name = "project_plan.docx", Content = "Plan for a project.", FolderId = 5, Status = SharedStatus.Private },
+                    new DumpFile() { Id = 6, Name = "presentation.pptx", Content = "A presentation about my project.", FolderId = 5, Status = SharedStatus.Shared },
+                    new DumpFile() { Id = 7, Name = "report.pdf", Content = "Report number 6.", FolderId = 6, Status = SharedStatus.Private },
+                    new DumpFile() { Id = 8, Name = "archive.zip", Content = "Here are saved some important documents.", FolderId = 7, Status = SharedStatus.Shared },
+                    new DumpFile() { Id = 9, Name = "data.csv", Content = "Seed data for my database.", FolderId = 7, Status = SharedStatus.Private },
+                    new DumpFile() { Id = 10, Name = "work_report.docx", Content = "Week 1: Number of working hours - 40\nWeek 2: Number of working hours - 38", FolderId = 8, Status = SharedStatus.Shared },
+                    new DumpFile() { Id = 11, Name = "game_review.txt", Content = "The game was fun to play but too many bad huys to fight", FolderId = 9, Status = SharedStatus.Private },
+                    new DumpFile() { Id = 12, Name = "recipe.pdf", Content = "Cookies: 2 eggs, flour, water, vanilla extract", FolderId = 10, Status = SharedStatus.Shared },
+                    new DumpFile() { Id = 13, Name = "notes.txt", Content = "Lorem ipsum.", FolderId = 11, Status = SharedStatus.Private }
                 });
 
             builder.Entity<Comment>()
                 .HasData(new List<Comment>
                 {
-                    new Comment("Great resume!", 1, 1) { Id = 1, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Lovely picture!", 2, 2) { Id = 2, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Nice music!", 3, 3) { Id = 3, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new Comment("Cool video!", 4, 4) { Id = 4, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("This resume could be better.", 1, 4) { Id = 5, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Beautiful image!", 2, 3) { Id = 6, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("I don't like this song!", 3, 3) { Id = 7, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Amazing video!", 4, 2) { Id = 8, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Excellent project plan!", 5, 2) { Id = 9, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Great presentation!", 6, 4) { Id = 10, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Very detailed report!", 7, 1) { Id = 11, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Important archive data.", 8, 2) { Id = 12, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Data needs cleanup.", 9, 1) { Id = 13, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc)},
-                    new Comment("Work file looks great!", 10, 3) { Id = 14, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Love the game review!", 11, 4) { Id = 15, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Nice recipe!", 12, 1) { Id = 16, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new Comment("Helpful notes!", 13, 3) { Id = 17, CreatedAt = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) }
+                    new Comment() { Id = 1, Content = "Great resume!", FileId = 1, UserId = 1},
+                    new Comment() { Id = 2, Content = "Lovely picture!", FileId = 2, UserId = 2},
+                    new Comment() { Id = 3, Content = "Nice music!", FileId = 3, UserId = 3 },
+                    new Comment() { Id = 4, Content = "Cool video!", FileId = 4, UserId = 4 },
+                    new Comment() { Id = 5, Content = "This resume could be better.", FileId = 1, UserId = 1 },
+                    new Comment() { Id = 6, Content = "Beautiful image!", FileId = 2, UserId = 2 },
+                    new Comment () { Id = 7, Content = "I don't like this song!", FileId = 3, UserId = 3 },
+                    new Comment() { Id = 8, Content = "Amazing video!", FileId = 4, UserId = 4 },
+                    new Comment() { Id = 9, Content = "Excellent project plan!", FileId = 5, UserId = 5 },
+                    new Comment() { Id = 10, Content = "Great presentation!", FileId = 6, UserId = 6 },
+                    new Comment() { Id = 11, Content = "Very detailed report!", FileId = 7, UserId = 7 },
+                    new Comment() { Id = 12, Content = "Important archive data.", FileId = 8, UserId = 8 },
+                    new Comment() { Id = 13, Content = "Data needs cleanup.", FileId = 9, UserId = 9 },
+                    new Comment() { Id = 14, Content = "Work file looks great!", FileId = 10, UserId = 10 },
+                    new Comment() { Id = 15, Content = "Love the game review!", FileId = 11, UserId = 11 },
+                    new Comment() { Id = 16, Content = "Nice recipe!", FileId = 12, UserId = 12 },
+                    new Comment() { Id = 17, Content = "Helpful notes!", FileId = 13, UserId = 13 }
                 });
 
             builder.Entity<AuditLog>()
                 .HasData(new List<AuditLog>
                 {
-                    new AuditLog(ChangeType.Created, 1, 1) { Id = 1, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Created, 2, 2) { Id = 2, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Updated, 3, 3) { Id = 3, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Created, 4, 4) { Id = 4, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Created, 5, 2) { Id = 5, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Updated, 6, 3) { Id = 6, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Created, 7, 1) { Id = 7, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Created, 8, 3) { Id = 8, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Updated, 9, 4) { Id = 9, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Created, 10, 5) { Id = 10, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) },
-                    new AuditLog(ChangeType.Created, 11, 6) { Id = 11, Timestamp = DateTime.SpecifyKind(new DateTime(2024, 12, 24, 10, 0, 0), DateTimeKind.Utc) }
+                    new AuditLog() { Id = 1, ChangeType = ChangeType.Created, FileId = 1, ChangedByUserId = 1},
+                    new AuditLog() { Id = 2, ChangeType = ChangeType.Created, FileId = 2, ChangedByUserId = 2 },
+                    new AuditLog() { Id = 3, ChangeType = ChangeType.Updated, FileId = 3, ChangedByUserId = 3 },
+                    new AuditLog() { Id = 4, ChangeType = ChangeType.Created, FileId = 4, ChangedByUserId = 4 },
+                    new AuditLog() { Id = 5, ChangeType = ChangeType.Created, FileId = 5, ChangedByUserId = 5 },
+                    new AuditLog() { Id = 6, ChangeType = ChangeType.Created, FileId = 6, ChangedByUserId = 6 },
+                    new AuditLog() { Id = 7, ChangeType = ChangeType.Created, FileId = 7, ChangedByUserId = 7 },
+                    new AuditLog() { Id = 8, ChangeType = ChangeType.Created, FileId = 8, ChangedByUserId = 8 },
+                    new AuditLog() { Id = 9, ChangeType = ChangeType.Created, FileId = 9, ChangedByUserId = 9 },
+                    new AuditLog() { Id = 10, ChangeType = ChangeType.Created, FileId = 10, ChangedByUserId = 10 },
+                    new AuditLog() { Id = 11, ChangeType = ChangeType.Created, FileId = 11, ChangedByUserId = 11 }
                 });
 
             builder.Entity<UserSharedFolder>()

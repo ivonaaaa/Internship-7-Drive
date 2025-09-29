@@ -1,4 +1,4 @@
-﻿using DumpDrive.Data.Entities;
+﻿using DumpDrive.Data;
 using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Factories;
 using Microsoft.EntityFrameworkCore;

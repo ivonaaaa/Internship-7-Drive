@@ -1,7 +1,7 @@
-﻿using DumpDrive.Data.Entities.Models;
-using DumpDrive.Data.Entities;
+﻿using DumpDrive.Data.Entities;
 using DumpDrive.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using DumpDrive.Data;
 
 namespace DumpDrive.Domain.Repositories
 {
@@ -19,9 +19,10 @@ namespace DumpDrive.Domain.Repositories
                 .OrderBy(f => f.Name)
                 .ToList();
 
-            return folders.Select(f => new Folder(f.Name, f.OwnerId)
+            return folders.Select(f => new Folder
             {
                 Id = f.Id,
+                Name  = f.Name,
                 Status = f.Status,
                 Files = f.Files.ToList()
             }).ToList();
@@ -31,9 +32,11 @@ namespace DumpDrive.Domain.Repositories
         {
             return DbContext.Files
                 .Where(f => f.FolderId == folderId)
-                .Select(f => new DumpFile(f.Name, f.FolderId)
+                .Select(f => new DumpFile()
                 {
                     Id = f.Id,
+                    Name = f.Name,
+                    Content = f.Content,
                     LastChanged = f.LastChanged,
                     Status = f.Status
                 })
@@ -60,7 +63,7 @@ namespace DumpDrive.Domain.Repositories
             var isDuplicate = DbContext.Folders.Any(f => f.OwnerId == userId && f.Name == folderName);
             if (isDuplicate) return ResponseResultType.AlreadyExists;
 
-            var folder = new Folder(folderName, userId);
+            var folder = new Folder();
             DbContext.Folders.Add(folder);
 
             return SaveChanges();
@@ -74,9 +77,12 @@ namespace DumpDrive.Domain.Repositories
             var isDuplicate = DbContext.Files.Any(f => f.FolderId == folderId && f.Name.ToLower() == fileName.ToLower());
             if (isDuplicate) return ResponseResultType.AlreadyExists;
 
-            var file = new DumpFile(fileName, folderId)
+            var file = new DumpFile()
             {
-                Status = SharedStatus.Private
+                Name = fileName,
+                Content = "",
+                Status = SharedStatus.Private,
+                FolderId = folderId,
             };
             DbContext.Files.Add(file);
 
@@ -105,7 +111,7 @@ namespace DumpDrive.Domain.Repositories
             if (file == null)
                 return ResponseResultType.Failure;
 
-            file.Content = newContent;
+            file.Content = newContent.Replace("\0", "");
             file.LastChanged = DateTime.UtcNow;
 
             DbContext.SaveChanges();

@@ -1,7 +1,7 @@
 ﻿using DumpDrive.Domain.Repositories;
 using DumpDrive.Presentation.Abstractions;
 using DumpDrive.Presentation.Utils;
-using DumpDrive.Data.Entities.Models;
+using DumpDrive.Data.Entities;
 using DumpDrive.Domain.Enums;
 
 namespace DumpDrive.Presentation.Actions
@@ -54,7 +54,7 @@ namespace DumpDrive.Presentation.Actions
                 break;
             }
 
-            var newUser = new User(email, password, email.Split('@')[0]);
+            var newUser = new User();
             var result = _userRepository.Add(newUser);
             if (result == ResponseResultType.Success)
                 Writer.Write("Registration successful! You can now log in.");

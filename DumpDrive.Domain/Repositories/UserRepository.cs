@@ -1,5 +1,5 @@
-﻿using DumpDrive.Data.Entities;
-using DumpDrive.Data.Entities.Models;
+﻿using DumpDrive.Data;
+using DumpDrive.Data.Entities;
 using DumpDrive.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 

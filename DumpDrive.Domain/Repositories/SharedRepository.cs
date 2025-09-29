@@ -1,5 +1,5 @@
-﻿using DumpDrive.Data.Entities;
-using DumpDrive.Data.Entities.Models;
+﻿using DumpDrive.Data;
+using DumpDrive.Data.Entities;
 using DumpDrive.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -148,12 +148,19 @@ namespace DumpDrive.Domain.Repositories
 
         public ResponseResultType AddComment(int fileId, int userId, string content)
         {
-            var file = DbContext.Files.FirstOrDefault(f => f.Id == fileId);
+            var file = DbContext.Files
+                .Include(f => f.Folder)
+                .FirstOrDefault(f => f.Id == fileId);
 
             if (file == null)
                 return ResponseResultType.NotFound;
 
-            var comment = new Comment(content, fileId, userId);
+            var comment = new Comment 
+            {
+                Content = content,
+                FileId = fileId,
+                UserId = userId
+            };
             DbContext.Comments.Add(comment);
             DbContext.SaveChanges();
 
@@ -198,7 +205,9 @@ namespace DumpDrive.Domain.Repositories
 
         public ResponseResultType UpdateFileContent(int fileId, int userId, string newContent)
         {
-            var file = DbContext.Files.FirstOrDefault(f => f.Id == fileId);
+            var file = DbContext.Files
+                .Include(f => f.Folder)
+                .FirstOrDefault(f => f.Id == fileId);
             if (file == null)
                 return ResponseResultType.NotFound;
 

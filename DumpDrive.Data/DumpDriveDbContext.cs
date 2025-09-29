@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using DumpDrive.Data.Entities.Models;
 using DumpDrive.Data.Seeds;
 using Microsoft.Extensions.Configuration;
+using DumpDrive.Data.Entities;
 
-namespace DumpDrive.Data.Entities
+namespace DumpDrive.Data
 {
     public class DumpDriveDbContext : DbContext
     {
