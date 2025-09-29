@@ -23,6 +23,7 @@ namespace DumpDrive.Presentation.Actions.Menus.ProfileSettings
             Writer.Write("Change Password...\n");
 
             var newPassword = Reader.ReadPassword();
+            Writer.Write("\nType in your password again to confirm...");
             var confirmPassword = Reader.ReadPassword();
             if (newPassword != confirmPassword)
             {

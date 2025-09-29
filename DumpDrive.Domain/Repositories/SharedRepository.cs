@@ -209,7 +209,7 @@ namespace DumpDrive.Domain.Repositories
                 .Include(f => f.Folder)
                 .FirstOrDefault(f => f.Id == fileId);
             if (file == null)
-                return ResponseResultType.NotFound;
+                return ResponseResultType.NotFound; 
 
             var hasAccess = DbContext.UserSharedFiles.Any(uf => uf.FileId == fileId && uf.UserId == userId) || file.Folder != null && file.Folder.OwnerId == userId;
 

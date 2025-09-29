@@ -51,12 +51,20 @@ namespace DumpDrive.Domain.Repositories
                 .FirstOrDefault();
         }
 
-        public DumpFile? GetFileByName(int userId, string fileName)
+        public DumpFile? GetFileByName(int userId, string name)
         {
             return DbContext.Files
-                .Where(f => f.Folder.OwnerId == userId && f.Name.ToLower() == fileName.ToLower())
-                .FirstOrDefault();
+                .Include(f => f.Folder)
+                .FirstOrDefault(f =>
+                    f.Name == name &&
+                    (
+                        f.Folder.OwnerId == userId ||
+                        f.SharedUsers.Any(su => su.UserId == userId) ||
+                        (f.Folder != null && f.Folder.SharedUsers.Any(su => su.UserId == userId))
+                    )
+                );
         }
+
 
         public ResponseResultType CreateFolder(int userId, string folderName)
         {
