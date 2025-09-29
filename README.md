@@ -1,32 +1,30 @@
 # INTERNSHIP
 > 7th ASSIGNMENT
 
-### DumpDrive App
+### DumpDrive App 💿
 
-The DumpDrive App is a console application built using C# in Visual Studio. The project utilizes a three-tier software architecture (Presentation, Domain, Data) and integrates a PostgreSQL database managed through PgAdmin. It is designed to mimic the functionality of a real disk drive, including features such as user authentication, file and folder management, sharing, and more. The project employs object-oriented programming (OOP) concepts and LINQ methods to ensure efficient and maintainable code.<br>
-On a side note, I have gained valuable experience in Object-Oriented Programming (OOP), LINQ methods, and the three-tier architecture. Additionally, I have focused on refactoring code to make it more readable and maintainable, which has significantly improved my coding practices.
+The DumpDrive App is a console application made to mimic a real disk drive where users can manage their content, including what's shared with them by other users. The project is built using C# in Visual Studio and is based on a three-tier software architecture. PostgreSQL database is integrated through PgAdmin, while the app communicates with it through LINQ queries and EF Core ORM. While coding this app I also used OOP concepts and some other design patterns.<br>
 
 ### Features
-<li>Dynamic console UI</li>
-<li>User Authentication</li>
-<li>Folder and file management</li>
-<li>Sharing logic</li>
-<li>Mutual editing and commenting shared files</li>
-<li>Profile management</li>
+- Dynamic console UI
+- User Authentication
+- Folder and file management
+- Specific logic integrated for shared content
+- Profile management
 
 ### Technologies used
-<li>Language: C#</li>
-<li>Framework: .NET 9.0</li>
-<li>Database: PostgreSQL</li>
-<li>ORM: Entity Framework Core</li>
-<li>Tools: Visual Studio, PgAdmin</li>
+- **Language:** C#
+- **Framework:** .NET 9.0
+- **Database:** PostgreSQL
+- **ORM:** Entity Framework Core
+- **Tools:** Visual Studio, PgAdmin
 
 ### Packages
 The project utilizes the following NuGet packages:
-<li>Microsoft.EntityFrameworkCore</li>
-<li>Npgsql.EntityFrameworkCore.PostgreSQL</li>
-<li>Microsoft.EntityFrameworkCore.Tools</li>
-<li>Microsoft.EntityFrameworkCore.Design</li>
+- Microsoft.EntityFrameworkCore
+- Npgsql.EntityFrameworkCore.PostgreSQL
+- Microsoft.EntityFrameworkCore.Tools
+- Microsoft.EntityFrameworkCore.Design
 
 ## Installation and running
 To get started with this project, you need to have the following installed on your machine:
@@ -50,14 +48,21 @@ Steps to Install the Project:
    ```bash
    dotnet restore
    ```
-3. **Navigate to the startup layer**:
+3. **Create the database in PGAdmin:** In this step you will need to connect to your PostgreSQL server. While doing so, remeber the usernane and password as you will need them later on.
+4. **Configure connection strring:** In the App.config.xml, set your connection string with the right values.
+5. **Apply migrations and seed data:**
    ```bash
-   cd DumpDrive.Presentation
+   cd DumpDrive.Data
+   dotnet ef migrations add InitialCreate
+   dotnet ef database update
    ```
-4. **Run the code**:
+6. **Navigate to the startup layer**:
+   ```bash
+   cd ../DumpDrive.Presentation
+   ```
+7. **Run the code**:
    ```bash
    dotnet run
    ```
-
    
    
